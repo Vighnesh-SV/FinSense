@@ -1,0 +1,142 @@
+/* ===== FinSense – main application layout (used with base.css) ===== */
+
+.app-root {
+    -fx-background-color: -fs-bg;
+}
+
+/* ---------- Sidebar ---------- */
+.sidebar {
+    -fx-background-color: -fs-navy;
+    -fx-padding: 22 14 18 14;
+}
+
+.sidebar-brand {
+    -fx-padding: 0 10 14 10;
+}
+
+.sidebar-title {
+    -fx-text-fill: white;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+.sidebar-tagline {
+    -fx-text-fill: derive(-fs-teal, 35%);
+    -fx-font-size: 11px;
+}
+
+.nav-section {
+    -fx-text-fill: #7f8db0;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-padding: 14 10 4 10;
+}
+
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #c9d2e6;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 9 12 9 12;
+    -fx-background-radius: 8;
+    -fx-font-size: 13px;
+}
+.nav-button:hover {
+    -fx-background-color: -fs-navy-light;
+    -fx-text-fill: white;
+}
+.nav-button.active {
+    -fx-background-color: -fs-teal;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.logout-button {
+    -fx-background-color: transparent;
+    -fx-border-color: #34456b;
+    -fx-border-radius: 8;
+    -fx-text-fill: #c9d2e6;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 9 12 9 12;
+}
+.logout-button:hover {
+    -fx-background-color: -fs-avoid;
+    -fx-border-color: -fs-avoid;
+    -fx-text-fill: white;
+}
+
+/* ---------- Header ---------- */
+.header {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent -fs-border transparent;
+    -fx-padding: 14 28 14 28;
+}
+
+.page-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fs-navy;
+}
+
+.user-chip {
+    -fx-background-color: -fs-bg;
+    -fx-background-radius: 999;
+    -fx-padding: 4 14 4 4;
+}
+
+.avatar {
+    -fx-background-color: -fs-teal;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-min-width: 30;
+    -fx-min-height: 30;
+    -fx-alignment: CENTER;
+    -fx-background-radius: 999;
+}
+
+.user-name {
+    -fx-font-size: 13px;
+    -fx-text-fill: -fs-navy;
+}
+
+/* ---------- Content area ---------- */
+.content-scroll,
+.content-scroll > .viewport {
+    -fx-background-color: transparent;
+    -fx-background: -fs-bg;
+}
+
+.content-area {
+    -fx-background-color: -fs-bg;
+}
+
+/* ---------- KPI cards (dashboard, insights) ---------- */
+.kpi-card {
+    -fx-background-color: white;
+    -fx-background-radius: 14;
+    -fx-border-color: -fs-border;
+    -fx-border-radius: 14;
+    -fx-padding: 16 18 16 18;
+}
+.kpi-label { -fx-text-fill: -fs-muted; -fx-font-size: 12px; }
+.kpi-value { -fx-text-fill: -fs-navy; -fx-font-size: 22px; -fx-font-weight: bold; }
+
+/* ---------- Tables ---------- */
+.table-view {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-color: -fs-border;
+    -fx-border-radius: 10;
+}
+.table-view .column-header-background { -fx-background-color: #f7f9fb; }
+.table-view .column-header .label     { -fx-font-weight: bold; -fx-text-fill: -fs-muted; }
+.table-row-cell:selected              { -fx-background-color: #d9f0ed; }
+.table-row-cell:selected .text        { -fx-fill: -fs-text; }
+
+/* ---------- Progress bars (savings goals) ---------- */
+.progress-bar > .bar   { -fx-background-color: -fs-teal; -fx-background-radius: 6; }
+.progress-bar > .track { -fx-background-color: #e8edf2; -fx-background-radius: 6; }
+
+/* ---------- Value indicators ---------- */
+.text-danger { -fx-text-fill: -fs-avoid !important; }
+.text-positive { -fx-text-fill: -fs-buy !important; }
+

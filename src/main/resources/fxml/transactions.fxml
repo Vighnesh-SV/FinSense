@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.finsense.controller.TransactionsController"
+            fitToWidth="true"
+            styleClass="content-scroll">
+    <content>
+        <VBox spacing="18" styleClass="content-area">
+            <padding>
+                <Insets top="24" right="28" bottom="28" left="28"/>
+            </padding>
+
+            <HBox spacing="12">
+                <VBox styleClass="kpi-card">
+                    <Label text="THIS MONTH INCOME" styleClass="kpi-label"/>
+                    <Label fx:id="incomeTotal" text="—" styleClass="kpi-value"/>
+                </VBox>
+                <VBox styleClass="kpi-card">
+                    <Label text="THIS MONTH EXPENSES" styleClass="kpi-label"/>
+                    <Label fx:id="expenseTotal" text="—" styleClass="kpi-value"/>
+                </VBox>
+                <VBox styleClass="kpi-card">
+                    <Label text="NET" styleClass="kpi-label"/>
+                    <Label fx:id="netTotal" text="—" styleClass="kpi-value"/>
+                </VBox>
+            </HBox>
+
+            <VBox styleClass="card" spacing="12">
+                <Label text="Transactions" styleClass="card-title"/>
+                <HBox spacing="8">
+                    <DatePicker fx:id="fromDate" promptText="From"/>
+                    <DatePicker fx:id="throughDate" promptText="Through"/>
+                    <ComboBox fx:id="filterType" promptText="Any type"/>
+                    <ComboBox fx:id="filterCategory" promptText="Any category"/>
+                    <TextField fx:id="searchField" promptText="Search description or category" HBox.hgrow="ALWAYS"/>
+                    <Button text="Apply filters" onAction="#onFilter" styleClass="btn-secondary"/>
+                    <Button text="Export CSV" onAction="#onExport" styleClass="btn-secondary"/>
+                </HBox>
+                <TableView fx:id="transactionTable" prefHeight="330" styleClass="table-view">
+                    <columns>
+                        <TableColumn fx:id="dateCol" text="Date" prefWidth="110"/>
+                        <TableColumn fx:id="typeCol" text="Type" prefWidth="100"/>
+                        <TableColumn fx:id="categoryCol" text="Category" prefWidth="160"/>
+                        <TableColumn fx:id="amountCol" text="Amount" prefWidth="130"/>
+                        <TableColumn fx:id="descriptionCol" text="Description" prefWidth="350"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="No transactions match these filters." styleClass="muted"/>
+                    </placeholder>
+                </TableView>
+            </VBox>
+
+            <VBox styleClass="card" spacing="12">
+                <Label text="Add or edit transaction" styleClass="card-title"/>
+                <HBox spacing="10">
+                    <ComboBox fx:id="typeField" promptText="Type"/>
+                    <ComboBox fx:id="categoryField" promptText="Category"/>
+                    <TextField fx:id="amountField" promptText="Amount (₹)"/>
+                    <DatePicker fx:id="dateField"/>
+                    <TextField fx:id="descriptionField" promptText="Description (optional)" HBox.hgrow="ALWAYS"/>
+                </HBox>
+                <Label fx:id="errorLabel" styleClass="error-label" managed="false" visible="false"/>
+                <HBox spacing="8">
+                    <Button fx:id="addButton" text="Add" onAction="#onAdd" styleClass="btn-primary"/>
+                    <Button fx:id="updateButton" text="Update selected" onAction="#onUpdate" styleClass="btn-secondary" disable="true"/>
+                    <Button fx:id="deleteButton" text="Delete selected" onAction="#onDelete" styleClass="btn-danger" disable="true"/>
+                    <Button text="Clear" onAction="#onClear" styleClass="btn-secondary"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </content>
+</ScrollPane>

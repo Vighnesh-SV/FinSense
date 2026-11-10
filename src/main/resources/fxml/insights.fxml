@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.finsense.controller.InsightsController"
+            fitToWidth="true"
+            styleClass="content-scroll">
+    <content>
+        <VBox spacing="16" styleClass="content-area">
+            <padding>
+                <Insets top="24" right="28" bottom="28" left="28"/>
+            </padding>
+
+            <Label fx:id="statusLabel" text="" styleClass="muted"/>
+
+            <VBox styleClass="card" spacing="10">
+                <Label text="Income and expenses by month" styleClass="card-title"/>
+                <BarChart fx:id="comparisonChart" prefHeight="310" animated="false">
+                    <xAxis>
+                        <CategoryAxis label="Month"/>
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis label="Amount (₹)" forceZeroInRange="true"/>
+                    </yAxis>
+                </BarChart>
+            </VBox>
+
+            <HBox spacing="14">
+                <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+                    <Label text="ESSENTIAL EXPENSES" styleClass="kpi-label"/>
+                    <Label fx:id="essentialValue" text="—" styleClass="kpi-value"/>
+                </VBox>
+                <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+                    <Label text="DISCRETIONARY EXPENSES" styleClass="kpi-label"/>
+                    <Label fx:id="discretionaryValue" text="—" styleClass="kpi-value"/>
+                </VBox>
+                <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+                    <Label text="SAVINGS RATE" styleClass="kpi-label"/>
+                    <Label fx:id="savingsRateValue" text="—" styleClass="kpi-value"/>
+                </VBox>
+            </HBox>
+
+            <VBox styleClass="card" spacing="10">
+                <Label text="Top spending categories this month" styleClass="card-title"/>
+                <TableView fx:id="categoriesTable" prefHeight="220" styleClass="table-view">
+                    <columns>
+                        <TableColumn fx:id="categoryNameCol" text="Category" prefWidth="200"/>
+                        <TableColumn fx:id="currentSpendCol" text="This month" prefWidth="150"/>
+                        <TableColumn fx:id="priorSpendCol" text="Last month" prefWidth="150"/>
+                        <TableColumn fx:id="changeCol" text="Change" prefWidth="100"/>
+                        <TableColumn fx:id="natureCol" text="Type" prefWidth="150"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="No spending recorded this month." styleClass="muted"/>
+                    </placeholder>
+                </TableView>
+            </VBox>
+
+            <VBox styleClass="card" spacing="10">
+                <Label text="Suggestions" styleClass="card-title"/>
+                <ListView fx:id="suggestionsList" prefHeight="120"/>
+            </VBox>
+
+            <VBox styleClass="card" spacing="10">
+                <Label text="Behaviour change history" styleClass="card-title"/>
+                <TableView fx:id="behaviourTable" prefHeight="210" styleClass="table-view">
+                    <columns>
+                        <TableColumn fx:id="behaviourDateCol" text="Changed at" prefWidth="180"/>
+                        <TableColumn fx:id="behaviourTypeCol" text="Profile" prefWidth="170"/>
+                        <TableColumn fx:id="behaviourSourceCol" text="Source" prefWidth="120"/>
+                        <TableColumn fx:id="behaviourReasonCol" text="Reason" prefWidth="400"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="Complete the questionnaire to begin behaviour tracking." styleClass="muted"/>
+                    </placeholder>
+                </TableView>
+            </VBox>
+        </VBox>
+    </content>
+</ScrollPane>

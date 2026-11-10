@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Login screen – shown first when the app starts (Phase 4).
+     Applies auth-root + auth-card from base.css + auth.css via SceneManager.showAuthScreen. -->
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="com.finsense.controller.LoginController"
+           styleClass="auth-root">
+
+    <VBox styleClass="auth-card" alignment="CENTER" spacing="14"
+          maxWidth="420" maxHeight="-Infinity">
+        <padding><Insets top="40" right="40" bottom="40" left="40"/></padding>
+
+        <!-- Brand -->
+        <Label text="FinSense" styleClass="brand-title"/>
+        <Label text="Personal Finance Decision &amp; Spending Advisor"
+               styleClass="brand-subtitle" wrapText="true"/>
+
+        <VBox spacing="4">
+            <Label text="USERNAME" styleClass="field-label"/>
+            <TextField fx:id="usernameField" promptText="Enter your username" maxWidth="Infinity"/>
+        </VBox>
+
+        <VBox spacing="4">
+            <Label text="PASSWORD" styleClass="field-label"/>
+            <PasswordField fx:id="passwordField" promptText="Enter your password" maxWidth="Infinity"/>
+        </VBox>
+
+        <!-- Inline error message; invisible until an error occurs -->
+        <Label fx:id="errorLabel" styleClass="error-label" wrapText="true"
+               managed="false" visible="false"/>
+
+        <Button fx:id="loginButton" text="Log in"
+                onAction="#onLogin"
+                styleClass="btn-primary"
+                defaultButton="true"
+                maxWidth="Infinity"/>
+
+        <Button text="Create an account"
+                onAction="#onGoToRegister"
+                styleClass="link-button"/>
+
+        <Button fx:id="demoButton" text="Load viva demo account"
+                onAction="#onLoadDemo" styleClass="btn-secondary" maxWidth="Infinity"/>
+    </VBox>
+
+</StackPane>
+

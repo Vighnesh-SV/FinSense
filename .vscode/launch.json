@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Run FinSense",
+      "request": "launch",
+      "mainClass": "com.finsense.Main",
+      "projectName": "finsense",
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "FinSense: Run (JavaFX)",
+      "type": "shell",
+      "command": "${workspaceFolder}\\run.bat",
+      "group": { "kind": "build", "isDefault": true },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "FinSense: Run tests",
+      "type": "shell",
+      "command": "cmd.exe",
+      "args": ["/c", "set MAVEN_USER_HOME=E:\\Tools\\m2home && .\\mvnw.cmd -Dmaven.repo.local=E:\\Tools\\m2 test"],
+      "group": "test",
+      "problemMatcher": []
+    }
+  ]
+}

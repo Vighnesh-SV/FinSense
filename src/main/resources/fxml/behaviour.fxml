@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.finsense.controller.BehaviourController"
+            fitToWidth="true"
+            styleClass="content-scroll">
+    <content>
+        <VBox spacing="18" styleClass="content-area">
+            <padding>
+                <Insets top="24" right="28" bottom="28" left="28"/>
+            </padding>
+
+            <VBox styleClass="card" spacing="14">
+                <Label text="Spending habits questionnaire" styleClass="card-title"/>
+                <Label text="Choose how much each statement describes you: 1 = strongly disagree, 5 = strongly agree." styleClass="muted" wrapText="true"/>
+                <GridPane hgap="14" vgap="10">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                        <ColumnConstraints minWidth="120"/>
+                    </columnConstraints>
+                    <Label text="I sometimes buy things on impulse." GridPane.rowIndex="0"/>
+                    <ComboBox fx:id="q1" promptText="1–5" GridPane.rowIndex="0" GridPane.columnIndex="1" maxWidth="Infinity"/>
+                    <Label text="I find it hard to resist tempting purchases." GridPane.rowIndex="1"/>
+                    <ComboBox fx:id="q2" promptText="1–5" GridPane.rowIndex="1" GridPane.columnIndex="1" maxWidth="Infinity"/>
+                    <Label text="I compare options before making a purchase." GridPane.rowIndex="2"/>
+                    <ComboBox fx:id="q3" promptText="1–5" GridPane.rowIndex="2" GridPane.columnIndex="1" maxWidth="Infinity"/>
+                    <Label text="I take time to consider whether I need an item." GridPane.rowIndex="3"/>
+                    <ComboBox fx:id="q4" promptText="1–5" GridPane.rowIndex="3" GridPane.columnIndex="1" maxWidth="Infinity"/>
+                    <Label text="I often buy items I do not really need." GridPane.rowIndex="4"/>
+                    <ComboBox fx:id="q5" promptText="1–5" GridPane.rowIndex="4" GridPane.columnIndex="1" maxWidth="Infinity"/>
+                    <Label text="I make unnecessary purchases regularly." GridPane.rowIndex="5"/>
+                    <ComboBox fx:id="q6" promptText="1–5" GridPane.rowIndex="5" GridPane.columnIndex="1" maxWidth="Infinity"/>
+                    <Label text="I shop or place orders frequently." GridPane.rowIndex="6"/>
+                    <ComboBox fx:id="q7" promptText="1–5" GridPane.rowIndex="6" GridPane.columnIndex="1" maxWidth="Infinity"/>
+                    <Label text="I make purchases on most days or weeks." GridPane.rowIndex="7"/>
+                    <ComboBox fx:id="q8" promptText="1–5" GridPane.rowIndex="7" GridPane.columnIndex="1" maxWidth="Infinity"/>
+                    <Label text="I usually stay within my spending plan." GridPane.rowIndex="8"/>
+                    <ComboBox fx:id="q9" promptText="1–5" GridPane.rowIndex="8" GridPane.columnIndex="1" maxWidth="Infinity"/>
+                    <Label text="I track my spending and avoid overspending." GridPane.rowIndex="9"/>
+                    <ComboBox fx:id="q10" promptText="1–5" GridPane.rowIndex="9" GridPane.columnIndex="1" maxWidth="Infinity"/>
+                    <Label text="I compare prices before choosing a product." GridPane.rowIndex="10"/>
+                    <ComboBox fx:id="q11" promptText="1–5" GridPane.rowIndex="10" GridPane.columnIndex="1" maxWidth="Infinity"/>
+                    <Label text="I set aside money for savings regularly." GridPane.rowIndex="11"/>
+                    <ComboBox fx:id="q12" promptText="1–5" GridPane.rowIndex="11" GridPane.columnIndex="1" maxWidth="Infinity"/>
+                </GridPane>
+                <Label fx:id="errorLabel" styleClass="error-label" managed="false" visible="false"/>
+                <Button text="Save answers" onAction="#onSubmit" styleClass="btn-primary"/>
+            </VBox>
+
+            <VBox styleClass="card" spacing="10">
+                <Label text="Your result" styleClass="card-title"/>
+                <Label fx:id="resultType" text="Complete the questionnaire to see your result." styleClass="kpi-value"/>
+                <Label fx:id="resultScores" text="" styleClass="muted"/>
+                <Label fx:id="resultExplanation" text="" styleClass="muted" wrapText="true"/>
+                <Button fx:id="continueButton" text="Continue to Dashboard" onAction="#onDashboard" styleClass="btn-primary" disable="true"/>
+            </VBox>
+        </VBox>
+    </content>
+</ScrollPane>

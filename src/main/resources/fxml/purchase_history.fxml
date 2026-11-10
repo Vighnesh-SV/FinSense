@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.finsense.controller.PurchaseHistoryController"
+            fitToWidth="true"
+            styleClass="content-scroll">
+    <content>
+        <VBox spacing="16" styleClass="content-area">
+            <padding>
+                <Insets top="24" right="28" bottom="28" left="28"/>
+            </padding>
+
+            <VBox styleClass="card" spacing="12">
+                <Label text="Purchase history" styleClass="card-title"/>
+                <TableView fx:id="purchaseTable" prefHeight="220" styleClass="table-view">
+                    <columns>
+                        <TableColumn fx:id="productCol" text="Product" prefWidth="220"/>
+                        <TableColumn fx:id="priceCol" text="Price" prefWidth="130"/>
+                        <TableColumn fx:id="verdictCol" text="Latest verdict" prefWidth="140"/>
+                        <TableColumn fx:id="scoreCol" text="Score" prefWidth="85"/>
+                        <TableColumn fx:id="statusCol" text="Status" prefWidth="130"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="No purchase evaluations yet." styleClass="muted"/>
+                    </placeholder>
+                </TableView>
+                <HBox spacing="8" alignment="CENTER_LEFT">
+                    <Button fx:id="reevaluateButton" text="Re-evaluate" onAction="#onReevaluate" styleClass="btn-primary" disable="true"/>
+                    <Button fx:id="purchasedButton" text="Mark as Purchased" onAction="#onMarkPurchased" styleClass="btn-secondary" disable="true"/>
+                    <Button fx:id="droppedButton" text="Mark as Dropped" onAction="#onMarkDropped" styleClass="btn-danger" disable="true"/>
+                    <CheckBox fx:id="deductSavingsCheck" text="Also deduct cost from free savings"/>
+                </HBox>
+            </VBox>
+
+            <VBox styleClass="card" spacing="10">
+                <Label text="Evaluation details" styleClass="card-title"/>
+                <TableView fx:id="historyTable" prefHeight="190" styleClass="table-view">
+                    <columns>
+                        <TableColumn fx:id="evaluatedCol" text="Evaluated at" prefWidth="180"/>
+                        <TableColumn fx:id="historyVerdictCol" text="Verdict" prefWidth="100"/>
+                        <TableColumn fx:id="historyScoreCol" text="Score" prefWidth="70"/>
+                        <TableColumn fx:id="expenseCol" text="Expenses snapshot" prefWidth="145"/>
+                        <TableColumn fx:id="disposableCol" text="Disposable snapshot" prefWidth="155"/>
+                        <TableColumn fx:id="freeSavingsCol" text="Free savings snapshot" prefWidth="155"/>
+                        <TableColumn fx:id="behaviourCol" text="Behaviour" prefWidth="130"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="Select a purchase to see all its evaluations." styleClass="muted"/>
+                    </placeholder>
+                </TableView>
+                <Label text="Compare two evaluations" styleClass="section-title"/>
+                <HBox spacing="14">
+                    <VBox styleClass="kpi-card" spacing="8" HBox.hgrow="ALWAYS">
+                        <ComboBox fx:id="compareLeft" promptText="First evaluation" maxWidth="Infinity"/>
+                        <Label fx:id="leftComparison" text="Select two evaluations to compare." styleClass="muted" wrapText="true"/>
+                    </VBox>
+                    <VBox styleClass="kpi-card" spacing="8" HBox.hgrow="ALWAYS">
+                        <ComboBox fx:id="compareRight" promptText="Second evaluation" maxWidth="Infinity"/>
+                        <Label fx:id="rightComparison" text="" styleClass="muted" wrapText="true"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </VBox>
+    </content>
+</ScrollPane>

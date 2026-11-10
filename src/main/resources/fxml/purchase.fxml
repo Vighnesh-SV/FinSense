@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.finsense.controller.PurchaseController"
+            fitToWidth="true"
+            styleClass="content-scroll">
+    <content>
+        <VBox spacing="18" styleClass="content-area">
+            <padding>
+                <Insets top="24" right="28" bottom="28" left="28"/>
+            </padding>
+
+            <VBox styleClass="card" spacing="14">
+                <Label text="Purchase Advisor" styleClass="card-title"/>
+                <Label text="Share a purchase idea to see how it fits your current finances." styleClass="muted" wrapText="true"/>
+                <GridPane hgap="14" vgap="12">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="50"/>
+                        <ColumnConstraints percentWidth="50"/>
+                    </columnConstraints>
+                    <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                        <Label text="PRODUCT" styleClass="field-label"/>
+                        <TextField fx:id="productNameField" promptText="e.g. Smartphone"/>
+                    </VBox>
+                    <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                        <Label text="PRICE (₹)" styleClass="field-label"/>
+                        <TextField fx:id="priceField" promptText="e.g. 25000"/>
+                    </VBox>
+                    <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                        <Label text="CATEGORY" styleClass="field-label"/>
+                        <ComboBox fx:id="categoryCombo" promptText="Choose expense category" maxWidth="Infinity"/>
+                    </VBox>
+                    <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Label text="NEED OR WANT?" styleClass="field-label"/>
+                        <ComboBox fx:id="necessityCombo" maxWidth="Infinity"/>
+                    </VBox>
+                    <VBox spacing="4" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                        <Label text="DESCRIPTION (OPTIONAL)" styleClass="field-label"/>
+                        <TextArea fx:id="descriptionField" promptText="Add context for this purchase" prefRowCount="2" wrapText="true"/>
+                    </VBox>
+                </GridPane>
+                <Label fx:id="errorLabel" styleClass="error-label" managed="false" visible="false" wrapText="true"/>
+                <Button fx:id="evaluateButton" text="Evaluate purchase" onAction="#onEvaluate" styleClass="btn-primary"/>
+            </VBox>
+
+            <VBox fx:id="resultCard" styleClass="card" spacing="12" managed="false" visible="false">
+                <HBox alignment="CENTER_LEFT" spacing="14">
+                    <Label text="Recommendation" styleClass="section-title"/>
+                    <Label fx:id="verdictLabel" text="WAIT" styleClass="badge"/>
+                    <Label fx:id="scoreLabel" text="0 / 100" styleClass="muted"/>
+                </HBox>
+                <Label text="Why" styleClass="section-title"/>
+                <ListView fx:id="explanationList" prefHeight="190"/>
+                <Label text="Warnings" styleClass="section-title"/>
+                <ListView fx:id="warningsList" prefHeight="90"/>
+            </VBox>
+        </VBox>
+    </content>
+</ScrollPane>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.finsense.controller.SavingsController"
+            fitToWidth="true"
+            styleClass="content-scroll">
+    <content>
+        <VBox spacing="18" styleClass="content-area">
+            <padding>
+                <Insets top="24" right="28" bottom="28" left="28"/>
+            </padding>
+
+            <VBox styleClass="card" spacing="12">
+                <HBox alignment="CENTER_LEFT">
+                    <Label text="Savings Goals" styleClass="card-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="freeSavingsLabel" text="Free savings: —" styleClass="section-title"/>
+                </HBox>
+                <TableView fx:id="goalTable" prefHeight="270" styleClass="table-view">
+                    <columns>
+                        <TableColumn fx:id="nameCol" text="Goal" prefWidth="130"/>
+                        <TableColumn fx:id="targetCol" text="Target" prefWidth="115"/>
+                        <TableColumn fx:id="savedCol" text="Saved" prefWidth="115"/>
+                        <TableColumn fx:id="remainingCol" text="Remaining" prefWidth="115"/>
+                        <TableColumn fx:id="progressCol" text="Progress" prefWidth="85"/>
+                        <TableColumn fx:id="deadlineCol" text="Deadline" prefWidth="105"/>
+                        <TableColumn fx:id="priorityCol" text="Priority" prefWidth="85"/>
+                        <TableColumn fx:id="statusCol" text="Status" prefWidth="105"/>
+                        <TableColumn fx:id="monthlyCol" text="Monthly to target" prefWidth="140"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="No savings goals yet." styleClass="muted"/>
+                    </placeholder>
+                </TableView>
+            </VBox>
+
+            <VBox styleClass="card" spacing="12">
+                <Label text="Goal details" styleClass="card-title"/>
+                <HBox spacing="10">
+                    <TextField fx:id="nameField" promptText="Goal name"/>
+                    <TextField fx:id="targetField" promptText="Target amount (₹)"/>
+                    <DatePicker fx:id="deadlinePicker"/>
+                    <ComboBox fx:id="priorityCombo" promptText="Priority"/>
+                </HBox>
+                <HBox spacing="8">
+                    <Button text="Create goal" onAction="#onCreate" styleClass="btn-primary"/>
+                    <Button fx:id="updateButton" text="Update selected" onAction="#onUpdate" styleClass="btn-secondary" disable="true"/>
+                    <Button fx:id="cancelButton" text="Cancel selected" onAction="#onCancel" styleClass="btn-danger" disable="true"/>
+                    <Button text="Clear" onAction="#onClear" styleClass="btn-secondary"/>
+                </HBox>
+            </VBox>
+
+            <VBox styleClass="card" spacing="12">
+                <Label text="Contribute to selected goal" styleClass="card-title"/>
+                <HBox spacing="10">
+                    <TextField fx:id="contributionAmountField" promptText="Contribution (₹)"/>
+                    <DatePicker fx:id="contributionDatePicker"/>
+                    <TextField fx:id="contributionNoteField" promptText="Note (optional)" HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="contributeButton" text="Add contribution" onAction="#onContribute" styleClass="btn-primary" disable="true"/>
+                </HBox>
+                <TableView fx:id="contributionTable" prefHeight="150" styleClass="table-view">
+                    <columns>
+                        <TableColumn fx:id="contributionDateCol" text="Date" prefWidth="140"/>
+                        <TableColumn fx:id="contributionAmountCol" text="Amount" prefWidth="150"/>
+                        <TableColumn fx:id="contributionNoteCol" text="Note" prefWidth="400"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="Select a goal to see its contribution history." styleClass="muted"/>
+                    </placeholder>
+                </TableView>
+            </VBox>
+        </VBox>
+    </content>
+</ScrollPane>

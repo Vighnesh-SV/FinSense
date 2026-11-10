@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.finsense.controller.DashboardController"
+            fitToWidth="true"
+            styleClass="content-scroll">
+    <content>
+        <VBox spacing="16" styleClass="content-area">
+            <padding>
+                <Insets top="22" right="26" bottom="28" left="26"/>
+            </padding>
+
+            <HBox spacing="12">
+                <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+                    <Label text="THIS MONTH INCOME" styleClass="kpi-label"/>
+                    <Label fx:id="incomeKpi" text="—" styleClass="kpi-value"/>
+                </VBox>
+                <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+                    <Label text="THIS MONTH EXPENSES" styleClass="kpi-label"/>
+                    <Label fx:id="expenseKpi" text="—" styleClass="kpi-value"/>
+                </VBox>
+                <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+                    <Label text="DISPOSABLE INCOME" styleClass="kpi-label"/>
+                    <Label fx:id="disposableKpi" text="—" styleClass="kpi-value"/>
+                </VBox>
+                <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+                    <Label text="FREE SAVINGS" styleClass="kpi-label"/>
+                    <Label fx:id="savingsKpi" text="—" styleClass="kpi-value"/>
+                </VBox>
+                <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
+                    <Label text="SPENDING PROFILE" styleClass="kpi-label"/>
+                    <Label fx:id="behaviourKpi" text="—" styleClass="kpi-value"/>
+                </VBox>
+            </HBox>
+
+            <Label fx:id="statusLabel" text="" styleClass="muted"/>
+
+            <HBox spacing="14">
+                <VBox styleClass="card" spacing="10" HBox.hgrow="ALWAYS">
+                    <Label text="Active goal progress" styleClass="card-title"/>
+                    <VBox fx:id="goalsBox" spacing="8"/>
+                </VBox>
+                <VBox styleClass="card" spacing="10" HBox.hgrow="ALWAYS">
+                    <Label text="This month's expense categories" styleClass="card-title"/>
+                    <PieChart fx:id="expenseChart" prefHeight="280" legendSide="BOTTOM"/>
+                </VBox>
+            </HBox>
+
+            <HBox spacing="14">
+                <VBox styleClass="card" spacing="10" HBox.hgrow="ALWAYS">
+                    <HBox>
+                        <Label text="Recent transactions" styleClass="card-title"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button text="View all" onAction="#onTransactions" styleClass="btn-secondary"/>
+                    </HBox>
+                    <TableView fx:id="transactionTable" prefHeight="210" styleClass="table-view">
+                        <columns>
+                            <TableColumn fx:id="txnDateCol" text="Date" prefWidth="100"/>
+                            <TableColumn fx:id="txnCategoryCol" text="Category" prefWidth="150"/>
+                            <TableColumn fx:id="txnAmountCol" text="Amount" prefWidth="120"/>
+                        </columns>
+                        <placeholder>
+                            <Label text="No transactions recorded yet." styleClass="muted"/>
+                        </placeholder>
+                    </TableView>
+                </VBox>
+                <VBox styleClass="card" spacing="10" HBox.hgrow="ALWAYS">
+                    <Label text="Recent purchase evaluations" styleClass="card-title"/>
+                    <TableView fx:id="purchaseTable" prefHeight="210" styleClass="table-view">
+                        <columns>
+                            <TableColumn fx:id="purchaseNameCol" text="Product" prefWidth="190"/>
+                            <TableColumn fx:id="purchaseVerdictCol" text="Verdict" prefWidth="100"/>
+                        </columns>
+                        <placeholder>
+                            <Label text="No evaluations yet." styleClass="muted"/>
+                        </placeholder>
+                    </TableView>
+                </VBox>
+            </HBox>
+
+            <VBox styleClass="card" spacing="10">
+                <Label text="Quick actions" styleClass="card-title"/>
+                <HBox spacing="8">
+                    <Button text="Add transaction" onAction="#onTransactions" styleClass="btn-primary"/>
+                    <Button text="Evaluate a purchase" onAction="#onPurchase" styleClass="btn-secondary"/>
+                    <Button text="View insights" onAction="#onInsights" styleClass="btn-secondary"/>
+                    <Button text="My profile" onAction="#onProfile" styleClass="btn-secondary"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </content>
+</ScrollPane>
