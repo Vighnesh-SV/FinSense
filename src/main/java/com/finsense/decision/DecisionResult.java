@@ -1,10 +1,26 @@
 package com.finsense.decision;
 
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.List;
 
-/** Complete explainable result and immutable snapshot saved in evaluation history. */
-public record DecisionResult(Recommendation recommendation,int score,List<String> explanationLines,
-                             List<String> warnings,FinancialSnapshot snapshot,LocalDateTime evaluatedAt) {
-    public DecisionResult { explanationLines=List.copyOf(explanationLines);warnings=List.copyOf(warnings); }
+/**
+ * The complete, explainable outcome of one evaluation.
+ *
+ * @param affordableFrom for WAIT/AVOID verdicts, the first month the purchase fits without
+ *                       touching the emergency reserve (null if not within two years, or not needed)
+ */
+public record DecisionResult(Recommendation recommendation, int score, List<String> explanationLines,
+                             List<String> warnings, FinancialSnapshot snapshot, LocalDateTime evaluatedAt,
+                             YearMonth affordableFrom) {
+
+    public DecisionResult {
+        explanationLines = List.copyOf(explanationLines);
+        warnings = List.copyOf(warnings);
+    }
+
+    public DecisionResult(Recommendation recommendation, int score, List<String> explanationLines,
+                          List<String> warnings, FinancialSnapshot snapshot, LocalDateTime evaluatedAt) {
+        this(recommendation, score, explanationLines, warnings, snapshot, evaluatedAt, null);
+    }
 }

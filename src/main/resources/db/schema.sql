@@ -166,3 +166,26 @@ CREATE TABLE IF NOT EXISTS behaviour_profiles (
     INDEX ix_behaviour_user (user_id, created_at),
     CONSTRAINT fk_behaviour_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
+
+-- 12. purchase_feedback (how the user felt about a purchase afterwards) --
+--     The learning signal: FinSense adjusts future advice from these ratings.
+CREATE TABLE IF NOT EXISTS purchase_feedback (
+    purchase_id BIGINT   NOT NULL PRIMARY KEY,
+    user_id     BIGINT   NOT NULL,
+    feedback    ENUM ('WORTH_IT', 'NEUTRAL', 'REGRET') NOT NULL,
+    rated_at    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX ix_feedback_user (user_id),
+    CONSTRAINT fk_feedback_purchase FOREIGN KEY (purchase_id) REFERENCES purchases (id) ON DELETE CASCADE,
+    CONSTRAINT fk_feedback_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
+
+-- 13. category_budgets (monthly spending limit per expense category) -----
+CREATE TABLE IF NOT EXISTS category_budgets (
+    id            BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id       BIGINT NOT NULL,
+    category_id   BIGINT NOT NULL,
+    monthly_limit BIGINT NOT NULL CHECK (monthly_limit > 0),
+    CONSTRAINT ux_budget_user_category UNIQUE (user_id, category_id),
+    CONSTRAINT fk_budget_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+    CONSTRAINT fk_budget_category FOREIGN KEY (category_id) REFERENCES categories (id) ON DELETE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;

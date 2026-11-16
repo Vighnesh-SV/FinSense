@@ -41,24 +41,38 @@ public class BehaviourDAO extends BaseDAO {
         return queryList("SELECT id,user_id,type,impulse_score,volume_score,discipline_score,source,reason,created_at " +
                 "FROM behaviour_profiles WHERE user_id=? ORDER BY created_at DESC,id DESC",PROFILE_MAPPER,userId);
     }
-    /** Spending observations are read as aggregate signals; no transaction details leak into the service. */
-    public SpendingSignals spendingSignals(long userId,LocalDate today) {
-        LocalDate start=today.minusDays(29);
-        List<LocalDate> firstRows=queryList("SELECT MIN(txn_date) first_date FROM transactions WHERE user_id=?",rs->getDate(rs,"first_date"),userId);
-        LocalDate first=firstRows.isEmpty()?null:firstRows.get(0);
-        long expenses=queryLong("SELECT COALESCE(SUM(t.amount),0) FROM transactions t WHERE t.user_id=? AND t.type='EXPENSE' AND t.txn_date BETWEEN ? AND ?",userId,start,today);
-        long discretionary=queryLong("SELECT COALESCE(SUM(t.amount),0) FROM transactions t JOIN categories c ON c.id=t.category_id " +
-                "WHERE t.user_id=? AND t.type='EXPENSE' AND c.nature='DISCRETIONARY' AND t.txn_date BETWEEN ? AND ?",userId,start,today);
-        long expenseCount=queryLong("SELECT COUNT(*) FROM transactions t WHERE t.user_id=? AND t.type='EXPENSE' AND t.txn_date BETWEEN ? AND ?",userId,start,today);
-        long discretionaryCount=queryLong("SELECT COUNT(*) FROM transactions t JOIN categories c ON c.id=t.category_id " +
-                "WHERE t.user_id=? AND t.type='EXPENSE' AND c.nature='DISCRETIONARY' AND t.txn_date BETWEEN ? AND ?",userId,start,today);
-        long purchased=queryLong("SELECT COUNT(DISTINCT p.id) FROM purchases p WHERE p.user_id=? AND p.status='PURCHASED'",userId);
-        long regretted=queryLong("SELECT COUNT(DISTINCT p.id) FROM purchases p WHERE p.user_id=? AND p.status='PURCHASED' " +
-                // "Ignored advice": bought although the LATEST evaluation said WAIT or AVOID.
-                "AND (SELECT h.recommendation FROM purchase_history h WHERE h.purchase_id=p.id " +
-                "ORDER BY h.evaluated_at DESC, h.id DESC LIMIT 1) IN ('AVOID','WAIT')",userId);
-        double spendShare=expenses==0?0.0:Money.ofPaise(discretionary).ratioTo(Money.ofPaise(expenses));
-        double transactionShare=expenseCount==0?0.0:(double)discretionaryCount/expenseCount;
-        return new SpendingSignals(first,spendShare,transactionShare,(int)regretted,(int)purchased);
+    /**
+     * Aggregate 30-day spending signals for the behaviour classifier (no row details leave the DAO).
+     * A purchase counts as "regretted" when the user rated it REGRET, or - if unrated - when it was
+     * bought although its latest evaluation said WAIT or AVOID (ignored advice).
+     */
+    public SpendingSignals spendingSignals(long userId, LocalDate today) {
+        LocalDate start = today.minusDays(29);
+        List<LocalDate> firstRows = queryList("SELECT MIN(txn_date) first_date FROM transactions WHERE user_id = ?",
+                rs -> getDate(rs, "first_date"), userId);
+        LocalDate first = firstRows.isEmpty() ? null : firstRows.get(0);
+
+        String expenseFilter = "WHERE t.user_id = ? AND t.type = 'EXPENSE' AND t.txn_date BETWEEN ? AND ?";
+        String discretionaryJoin = "FROM transactions t JOIN categories c ON c.id = t.category_id ";
+        long expenses = queryLong("SELECT COALESCE(SUM(t.amount), 0) FROM transactions t " + expenseFilter,
+                userId, start, today);
+        long discretionary = queryLong("SELECT COALESCE(SUM(t.amount), 0) " + discretionaryJoin + expenseFilter
+                + " AND c.nature = 'DISCRETIONARY'", userId, start, today);
+        long expenseCount = queryLong("SELECT COUNT(*) FROM transactions t " + expenseFilter, userId, start, today);
+        long discretionaryCount = queryLong("SELECT COUNT(*) " + discretionaryJoin + expenseFilter
+                + " AND c.nature = 'DISCRETIONARY'", userId, start, today);
+
+        long purchased = queryLong("SELECT COUNT(*) FROM purchases p WHERE p.user_id = ? AND p.status = 'PURCHASED'",
+                userId);
+        long regretted = queryLong("SELECT COUNT(*) FROM purchases p "
+                + "LEFT JOIN purchase_feedback f ON f.purchase_id = p.id "
+                + "WHERE p.user_id = ? AND p.status = 'PURCHASED' AND ("
+                + "f.feedback = 'REGRET' OR (f.feedback IS NULL AND "
+                + "(SELECT h.recommendation FROM purchase_history h WHERE h.purchase_id = p.id "
+                + "ORDER BY h.evaluated_at DESC, h.id DESC LIMIT 1) IN ('AVOID', 'WAIT')))", userId);
+
+        double spendShare = expenses == 0 ? 0.0 : Money.ofPaise(discretionary).ratioTo(Money.ofPaise(expenses));
+        double transactionShare = expenseCount == 0 ? 0.0 : (double) discretionaryCount / expenseCount;
+        return new SpendingSignals(first, spendShare, transactionShare, (int) regretted, (int) purchased);
     }
 }

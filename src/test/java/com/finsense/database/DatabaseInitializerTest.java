@@ -37,14 +37,14 @@ class DatabaseInitializerTest {
     }
 
     @Test
-    void createsAllElevenTablesOnFirstRun() throws SQLException {
+    void createsAllThirteenTablesOnFirstRun() throws SQLException {
         DatabaseInitializer.InitResult result = new DatabaseInitializer(db).initialize();
 
         assertTrue(result.freshDatabase());
-        assertEquals(11, result.tableCount());
+        assertEquals(13, result.tableCount());
         List<String> expected = List.of("users", "financial_profiles", "commitments", "categories",
                 "transactions", "savings_goals", "goal_contributions", "questionnaires",
-                "behaviour_profiles", "purchases", "purchase_history");
+                "behaviour_profiles", "purchases", "purchase_history", "purchase_feedback", "category_budgets");
         List<String> actual = tableNames(db.getConnection());
         assertTrue(actual.containsAll(expected), "Missing tables. Found: " + actual);
     }

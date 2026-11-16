@@ -20,7 +20,7 @@ public final class TestDatabase {
 
     /** Child tables first, so dropping never violates a foreign key. */
     private static final String[] TABLES = {
-            "goal_contributions", "savings_goals", "transactions", "purchase_history", "purchases",
+            "purchase_feedback", "category_budgets", "goal_contributions", "savings_goals", "transactions", "purchase_history", "purchases",
             "behaviour_profiles", "questionnaires", "commitments", "financial_profiles", "categories", "users"
     };
 
