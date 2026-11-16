@@ -10,18 +10,15 @@
             styleClass="content-scroll"
             fitToWidth="true">
 
-    <VBox spacing="20">
+    <VBox spacing="24" styleClass="content-area">
         <padding>
-            <Insets top="24" right="28" bottom="28" left="28"/>
+            <Insets top="28" right="36" bottom="36" left="36"/>
         </padding>
 
         <!-- 1. SUMMARY CARD (Top) -->
         <VBox styleClass="card" spacing="14">
-            <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
-            </padding>
 
-            <Label text="Financial Summary" styleClass="card-title"/>
+            <Label text="Your monthly picture" styleClass="card-title"/>
 
             <!-- Placeholder label when profile is incomplete -->
             <Label fx:id="summaryPlaceholder"
@@ -32,27 +29,29 @@
             <VBox fx:id="summaryContent" spacing="12" managed="false" visible="false">
                 <HBox spacing="14">
                     <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
-                        <Label text="Monthly Income" styleClass="kpi-label"/>
+                        <Label text="MONTHLY INCOME" styleClass="kpi-label"/>
                         <Label fx:id="kpiIncome" text="₹0" styleClass="kpi-value"/>
                     </VBox>
                     <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
-                        <Label text="Total Expenses" styleClass="kpi-label"/>
+                        <Label text="TOTAL EXPENSES" styleClass="kpi-label"/>
                         <Label fx:id="kpiExpenses" text="₹0" styleClass="kpi-value"/>
                     </VBox>
                     <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
-                        <Label text="Active Commitments" styleClass="kpi-label"/>
+                        <Label text="ACTIVE COMMITMENTS" styleClass="kpi-label"/>
                         <Label fx:id="kpiCommitments" text="₹0" styleClass="kpi-value"/>
                     </VBox>
+                    </HBox>
+                <HBox spacing="14">
                     <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
-                        <Label text="Savings Target" styleClass="kpi-label"/>
+                        <Label text="SAVINGS TARGET" styleClass="kpi-label"/>
                         <Label fx:id="kpiTarget" text="₹0" styleClass="kpi-value"/>
                     </VBox>
                     <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
-                        <Label text="Disposable Income" styleClass="kpi-label"/>
+                        <Label text="DISPOSABLE INCOME" styleClass="kpi-label"/>
                         <Label fx:id="kpiDisposable" text="₹0" styleClass="kpi-value"/>
                     </VBox>
                     <VBox styleClass="kpi-card" HBox.hgrow="ALWAYS">
-                        <Label text="Emergency Reserve (3 mo)" styleClass="kpi-label"/>
+                        <Label text="EMERGENCY RESERVE (3 MO)" styleClass="kpi-label"/>
                         <Label fx:id="kpiReserve" text="₹0" styleClass="kpi-value"/>
                     </VBox>
                 </HBox>
@@ -65,14 +64,11 @@
 
         <!-- 2. FINANCIAL PROFILE CARD -->
         <VBox styleClass="card" spacing="16">
-            <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
-            </padding>
 
-            <Label text="Monthly Baseline Profile" styleClass="card-title"/>
+            <Label text="Income and regular spending" styleClass="card-title"/>
             <Label text="Define your recurring monthly income, expense estimates, and baseline savings target." styleClass="muted"/>
 
-            <GridPane hgap="16" vgap="12">
+            <GridPane hgap="18" vgap="16">
                 <columnConstraints>
                     <ColumnConstraints percentWidth="33.3"/>
                     <ColumnConstraints percentWidth="33.3"/>
@@ -80,32 +76,32 @@
                 </columnConstraints>
 
                 <!-- Monthly Income -->
-                <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                    <Label text="MONTHLY INCOME (₹)" styleClass="field-label"/>
+                <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                    <Label text="Monthly income (₹)" styleClass="field-label"/>
                     <TextField fx:id="incomeField" promptText="e.g. 50000"/>
                 </VBox>
 
                 <!-- Fixed Expenses -->
-                <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                    <Label text="FIXED EXPENSES (₹)" styleClass="field-label"/>
+                <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                    <Label text="Fixed expenses (₹)" styleClass="field-label"/>
                     <TextField fx:id="fixedExpensesField" promptText="e.g. 15000"/>
                 </VBox>
 
                 <!-- Variable Expenses -->
-                <VBox spacing="4" GridPane.columnIndex="2" GridPane.rowIndex="0">
-                    <Label text="VARIABLE EXPENSES (₹)" styleClass="field-label"/>
+                <VBox spacing="6" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                    <Label text="Variable expenses (₹)" styleClass="field-label"/>
                     <TextField fx:id="variableExpensesField" promptText="e.g. 10000"/>
                 </VBox>
 
                 <!-- Current Savings -->
-                <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="1">
-                    <Label text="CURRENT SAVINGS (₹)" styleClass="field-label"/>
+                <VBox spacing="6" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                    <Label text="Current savings (₹)" styleClass="field-label"/>
                     <TextField fx:id="savingsField" promptText="e.g. 200000"/>
                 </VBox>
 
                 <!-- Monthly Savings Target -->
-                <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                    <Label text="MONTHLY SAVINGS TARGET (₹)" styleClass="field-label"/>
+                <VBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <Label text="Monthly savings target (₹)" styleClass="field-label"/>
                     <TextField fx:id="savingsTargetField" promptText="e.g. 10000"/>
                 </VBox>
             </GridPane>
@@ -114,13 +110,13 @@
             <Label fx:id="profileErrorLabel" styleClass="error-label" managed="false" visible="false" wrapText="true"/>
 
             <HBox alignment="CENTER_LEFT" spacing="12">
-                <Button fx:id="saveProfileButton" text="Save Profile" onAction="#onSaveProfile" styleClass="btn-primary"/>
+                <Button fx:id="saveProfileButton" text="Save profile" onAction="#onSaveProfile" styleClass="btn-primary"/>
             </HBox>
         </VBox>
 
         <!-- 3. BEHAVIOUR PROFILE -->
         <VBox styleClass="card" spacing="10">
-            <Label text="Spending Behaviour" styleClass="card-title"/>
+            <Label text="Spending personality" styleClass="card-title"/>
             <Label fx:id="behaviourSummaryLabel" text="Questionnaire not completed yet." styleClass="muted"/>
             <HBox spacing="10">
                 <Button text="Continue to questionnaire" onAction="#onContinueToQuestionnaire" styleClass="btn-primary"/>
@@ -130,21 +126,19 @@
 
         <!-- 4. COMMITMENTS CARD -->
         <VBox styleClass="card" spacing="16">
-            <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
-            </padding>
 
-            <Label text="Recurring Commitments (EMIs, Loans, Rent, etc.)" styleClass="card-title"/>
-            <Label text="Manage fixed recurring obligations with start dates and optional end dates." styleClass="muted"/>
+            <Label text="Recurring commitments" styleClass="card-title"/>
+            <Label text="EMIs, loans, rent and other fixed monthly payments." styleClass="muted"/>
 
-            <TableView fx:id="commitmentsTable" prefHeight="220" styleClass="table-view">
+            <TableView fx:id="commitmentsTable" prefHeight="230">
+                <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN"/></columnResizePolicy>
                 <columns>
-                    <TableColumn fx:id="colName" text="Name" prefWidth="180"/>
-                    <TableColumn fx:id="colType" text="Type" prefWidth="120"/>
-                    <TableColumn fx:id="colAmount" text="Monthly Amount" prefWidth="140"/>
-                    <TableColumn fx:id="colStart" text="Start Date" prefWidth="120"/>
-                    <TableColumn fx:id="colEnd" text="End Date" prefWidth="120"/>
-                    <TableColumn fx:id="colStatus" text="Status" prefWidth="110"/>
+                    <TableColumn fx:id="colName" text="NAME" prefWidth="180"/>
+                    <TableColumn fx:id="colType" text="TYPE" prefWidth="120"/>
+                    <TableColumn fx:id="colAmount" text="PER MONTH" prefWidth="140"/>
+                    <TableColumn fx:id="colStart" text="STARTS" prefWidth="120"/>
+                    <TableColumn fx:id="colEnd" text="ENDS" prefWidth="120"/>
+                    <TableColumn fx:id="colStatus" text="STATUS" prefWidth="110"/>
                 </columns>
                 <placeholder>
                     <Label text="No commitments added yet." styleClass="muted"/>
@@ -153,31 +147,31 @@
 
             <!-- Form Row below Table -->
             <VBox spacing="10">
-                <Label text="Commitment Details" styleClass="section-title"/>
+                <Label text="Add or edit a commitment" styleClass="section-title"/>
 
-                <HBox spacing="12" alignment="BOTTOM_LEFT">
+                <HBox spacing="14" alignment="BOTTOM_LEFT">
                     <VBox spacing="4" HBox.hgrow="ALWAYS">
-                        <Label text="NAME" styleClass="field-label"/>
+                        <Label text="Name" styleClass="field-label"/>
                         <TextField fx:id="commitmentNameField" promptText="e.g. Home Rent"/>
                     </VBox>
 
                     <VBox spacing="4" prefWidth="130">
-                        <Label text="TYPE" styleClass="field-label"/>
+                        <Label text="Type" styleClass="field-label"/>
                         <ComboBox fx:id="commitmentTypeCombo" maxWidth="Infinity"/>
                     </VBox>
 
                     <VBox spacing="4" prefWidth="140">
-                        <Label text="AMOUNT (₹)" styleClass="field-label"/>
+                        <Label text="Amount (₹)" styleClass="field-label"/>
                         <TextField fx:id="commitmentAmountField" promptText="e.g. 15000"/>
                     </VBox>
 
                     <VBox spacing="4" prefWidth="140">
-                        <Label text="START DATE" styleClass="field-label"/>
+                        <Label text="Start date" styleClass="field-label"/>
                         <DatePicker fx:id="commitmentStartDatePicker" maxWidth="Infinity"/>
                     </VBox>
 
                     <VBox spacing="4" prefWidth="140">
-                        <Label text="END DATE (OPTIONAL)" styleClass="field-label"/>
+                        <Label text="End date (optional)" styleClass="field-label"/>
                         <DatePicker fx:id="commitmentEndDatePicker" maxWidth="Infinity" promptText="Ongoing"/>
                     </VBox>
                 </HBox>
@@ -186,10 +180,10 @@
                 <Label fx:id="commitmentErrorLabel" styleClass="error-label" managed="false" visible="false" wrapText="true"/>
 
                 <HBox spacing="10" alignment="CENTER_LEFT">
-                    <Button fx:id="addCommitmentButton" text="Add Commitment" onAction="#onAddCommitment" styleClass="btn-primary"/>
-                    <Button fx:id="updateCommitmentButton" text="Update Selected" onAction="#onUpdateCommitment" styleClass="btn-secondary" disable="true"/>
-                    <Button fx:id="deleteCommitmentButton" text="Delete Selected" onAction="#onDeleteCommitment" styleClass="btn-danger" disable="true"/>
-                    <Button text="Clear Form" onAction="#onClearCommitmentForm" styleClass="btn-secondary"/>
+                    <Button fx:id="addCommitmentButton" text="Add commitment" onAction="#onAddCommitment" styleClass="btn-primary"/>
+                    <Button fx:id="updateCommitmentButton" text="Save changes" onAction="#onUpdateCommitment" styleClass="btn-secondary" disable="true"/>
+                    <Button fx:id="deleteCommitmentButton" text="Delete" onAction="#onDeleteCommitment" styleClass="btn-danger" disable="true"/>
+                    <Button text="Clear form" onAction="#onClearCommitmentForm" styleClass="btn-ghost"/>
                 </HBox>
             </VBox>
         </VBox>

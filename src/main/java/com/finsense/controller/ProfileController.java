@@ -81,7 +81,7 @@ public class ProfileController extends BaseController {
         colName.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getName()));
         colType.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getType().getLabel()));
         colAmount.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMonthlyAmount().format()));
-        colStart.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStartDate().toString()));
+        colStart.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStartDate().format(UiKit.DAY)));
         colEnd.setCellValueFactory(data -> {
             LocalDate end = data.getValue().getEndDate();
             return new SimpleStringProperty(end != null ? end.toString() : "Ongoing");

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Budgets: one card per budget with a progress bar, plus a small form to add or change one. -->
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.finsense.controller.BudgetsController"
+            fitToWidth="true"
+            styleClass="content-scroll">
+    <content>
+        <HBox spacing="24" styleClass="content-area">
+            <padding>
+                <Insets top="28" right="36" bottom="36" left="36"/>
+            </padding>
+
+            <VBox styleClass="card" spacing="16" HBox.hgrow="ALWAYS" maxHeight="-Infinity">
+                <HBox alignment="CENTER_LEFT">
+                    <Label fx:id="monthTitle" text="This month" styleClass="card-title" HBox.hgrow="ALWAYS"
+                           maxWidth="Infinity"/>
+                    <Label fx:id="totalLabel" styleClass="muted"/>
+                </HBox>
+                <VBox fx:id="budgetList" spacing="12"/>
+            </VBox>
+
+            <VBox styleClass="card" spacing="16" prefWidth="340" minWidth="300" maxHeight="-Infinity">
+                <VBox spacing="4">
+                    <Label text="Set a budget" styleClass="card-title"/>
+                    <Label text="Choosing a category that already has a budget replaces its limit."
+                           styleClass="muted" wrapText="true"/>
+                </VBox>
+                <VBox spacing="6">
+                    <Label text="Category" styleClass="field-label"/>
+                    <ComboBox fx:id="categoryCombo" promptText="Choose a category" maxWidth="Infinity"
+                              visibleRowCount="8"/>
+                </VBox>
+                <VBox spacing="6">
+                    <Label text="Monthly limit (₹)" styleClass="field-label"/>
+                    <TextField fx:id="limitField" promptText="e.g. 4,000"/>
+                </VBox>
+                <Label fx:id="errorLabel" styleClass="error-label" managed="false" visible="false" wrapText="true"/>
+                <Button fx:id="saveButton" text="Save budget" onAction="#onSave" styleClass="btn-primary"
+                        maxWidth="Infinity" defaultButton="true"/>
+                <Label text="The purchase advisor lowers its score when a purchase would push a category over its budget."
+                       styleClass="info-note" wrapText="true" maxWidth="Infinity"/>
+            </VBox>
+        </HBox>
+    </content>
+</ScrollPane>

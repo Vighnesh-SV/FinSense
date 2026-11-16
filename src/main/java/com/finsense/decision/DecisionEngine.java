@@ -65,8 +65,13 @@ public final class DecisionEngine {
         }
 
         List<String> explanation = explanation(request, results, score, band, verdict, hardStop, affordableFrom);
+        List<Reason> reasons = results.stream()
+                .filter(r -> !r.message().isBlank())
+                .sorted(Comparator.comparing(RuleResult::severity).reversed())
+                .map(r -> new Reason(r.severity(), r.message()))
+                .toList();
         return new DecisionResult(verdict, score, explanation, warnings(snapshot), snapshot,
-                LocalDateTime.now(), affordableFrom);
+                LocalDateTime.now(), affordableFrom, reasons);
     }
 
     private static List<String> explanation(PurchaseRequest request, List<RuleResult> results, int score,

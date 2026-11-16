@@ -97,5 +97,13 @@ public class UserDAO extends BaseDAO {
                 username
         ) > 0;
     }
+
+    /**
+     * Deletes a user. Every table that references users uses ON DELETE CASCADE,
+     * so MySQL removes the user's transactions, goals, purchases, etc. as well.
+     */
+    public boolean deleteByUsername(String username) {
+        return update("DELETE FROM users WHERE username = ?", username) > 0;
+    }
 }
 

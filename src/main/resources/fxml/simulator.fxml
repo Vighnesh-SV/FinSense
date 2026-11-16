@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- What-if simulator: inputs (left), verdict and 12-month projection (right).
+     Nothing on this screen is saved. -->
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.*?>
 <?import javafx.scene.control.*?>
@@ -11,66 +14,106 @@
             fitToWidth="true"
             styleClass="content-scroll">
     <content>
-        <VBox spacing="16" styleClass="content-area">
+        <HBox spacing="24" styleClass="content-area">
             <padding>
-                <Insets top="24" right="28" bottom="28" left="28"/>
+                <Insets top="28" right="36" bottom="36" left="36"/>
             </padding>
 
-            <VBox styleClass="card" spacing="12">
-                <Label text="What-if simulator" styleClass="card-title"/>
-                <Label text="Explore a possible purchase without writing any records." styleClass="muted"/>
-                <HBox spacing="10">
-                    <TextField fx:id="productNameField" promptText="Product name"/>
-                    <TextField fx:id="priceField" promptText="Price (₹)"/>
-                    <ComboBox fx:id="categoryCombo" promptText="Expense category"/>
-                    <ComboBox fx:id="necessityCombo"/>
-                    <ComboBox fx:id="instalmentsCombo" promptText="Instalments"/>
-                    <Button fx:id="simulateButton" text="Simulate" onAction="#onSimulate" styleClass="btn-primary"/>
+            <VBox styleClass="card" spacing="18" prefWidth="360" minWidth="330" maxHeight="-Infinity">
+                <VBox spacing="4">
+                    <Label text="Try a scenario" styleClass="card-title"/>
+                    <Label text="Compare paying at once with spreading the cost over a few months."
+                           styleClass="muted" wrapText="true"/>
+                </VBox>
+                <VBox spacing="6">
+                    <Label text="Item" styleClass="field-label"/>
+                    <TextField fx:id="productNameField" promptText="e.g. Laptop"/>
+                </VBox>
+                <VBox spacing="6">
+                    <Label text="Price (₹)" styleClass="field-label"/>
+                    <TextField fx:id="priceField" promptText="e.g. 65,000"/>
+                </VBox>
+                <VBox spacing="6">
+                    <Label text="Category" styleClass="field-label"/>
+                    <ComboBox fx:id="categoryCombo" promptText="Choose a category" maxWidth="Infinity"
+                              visibleRowCount="8"/>
+                </VBox>
+                <HBox spacing="14">
+                    <VBox spacing="6" HBox.hgrow="ALWAYS">
+                        <Label text="Need or want?" styleClass="field-label"/>
+                        <ComboBox fx:id="necessityCombo" maxWidth="Infinity"/>
+                    </VBox>
+                    <VBox spacing="6" HBox.hgrow="ALWAYS">
+                        <Label text="Pay in" styleClass="field-label"/>
+                        <ComboBox fx:id="instalmentsCombo" maxWidth="Infinity"/>
+                    </VBox>
                 </HBox>
-                <Label fx:id="errorLabel" styleClass="error-label" managed="false" visible="false"/>
+                <Label fx:id="errorLabel" styleClass="error-label" managed="false" visible="false" wrapText="true"/>
+                <Button fx:id="simulateButton" text="Run simulation" onAction="#onSimulate"
+                        styleClass="btn-primary" maxWidth="Infinity" defaultButton="true"/>
             </VBox>
 
-            <VBox fx:id="resultCard" styleClass="card" spacing="12" managed="false" visible="false">
-                <HBox alignment="CENTER_LEFT" spacing="12">
-                    <Label text="Recommendation" styleClass="section-title"/>
-                    <Label fx:id="verdictLabel" text="WAIT" styleClass="badge"/>
-                    <Label fx:id="scoreLabel" text="0 / 100" styleClass="muted"/>
-                </HBox>
-                <Label text="12-month savings projection" styleClass="section-title"/>
-                <LineChart fx:id="savingsChart" prefHeight="280" animated="false">
-                    <xAxis>
-                        <NumberAxis label="Month" forceZeroInRange="true"/>
-                    </xAxis>
-                    <yAxis>
-                        <NumberAxis label="Savings (₹)" forceZeroInRange="false"/>
-                    </yAxis>
-                </LineChart>
-                <Label text="Goal impact" styleClass="section-title"/>
-                <TableView fx:id="goalsTable" prefHeight="160" styleClass="table-view">
-                    <columns>
-                        <TableColumn fx:id="goalNameCol" text="Goal" prefWidth="170"/>
-                        <TableColumn fx:id="goalEtaCol" text="ETA without → with purchase" prefWidth="260"/>
-                        <TableColumn fx:id="goalDelayCol" text="Delay" prefWidth="180"/>
-                        <TableColumn fx:id="goalDeadlineCol" text="Deadline" prefWidth="130"/>
-                    </columns>
-                    <placeholder>
-                        <Label text="No active goals." styleClass="muted"/>
-                    </placeholder>
-                </TableView>
-                <Label text="Commitments ending during the projection" styleClass="section-title"/>
-                <TableView fx:id="commitmentTable" prefHeight="140" styleClass="table-view">
-                    <columns>
-                        <TableColumn fx:id="commitmentNameCol" text="Commitment" prefWidth="200"/>
-                        <TableColumn fx:id="commitmentEndCol" text="End date / month" prefWidth="220"/>
-                        <TableColumn fx:id="commitmentAmountCol" text="Monthly amount released" prefWidth="220"/>
-                    </columns>
-                    <placeholder>
-                        <Label text="No commitments end in the next year." styleClass="muted"/>
-                    </placeholder>
-                </TableView>
-                <Label text="Warnings" styleClass="section-title"/>
-                <ListView fx:id="warningsList" prefHeight="80"/>
+            <VBox styleClass="card" spacing="20" HBox.hgrow="ALWAYS" maxHeight="-Infinity">
+                <VBox fx:id="emptyState" styleClass="empty-state" spacing="8">
+                    <Label text="Nothing simulated yet" styleClass="card-title"/>
+                    <Label text="Enter a scenario on the left to see the next twelve months." styleClass="muted"/>
+                </VBox>
+
+                <VBox fx:id="resultCard" spacing="20" managed="false" visible="false">
+                    <HBox fx:id="verdictHero" styleClass="verdict-hero" alignment="CENTER_LEFT" spacing="24">
+                        <VBox spacing="2" HBox.hgrow="ALWAYS">
+                            <Label text="WITH THIS PLAN" styleClass="eyebrow"/>
+                            <Label fx:id="verdictLabel" text="WAIT" styleClass="verdict-word"/>
+                            <Label fx:id="planLabel" styleClass="muted" wrapText="true"/>
+                        </VBox>
+                        <VBox spacing="2" alignment="CENTER_RIGHT">
+                            <Label text="SCORE" styleClass="eyebrow"/>
+                            <Label fx:id="scoreLabel" text="0" styleClass="score-value"/>
+                        </VBox>
+                    </HBox>
+
+                    <Label fx:id="timingLabel" styleClass="timing-note" wrapText="true" maxWidth="Infinity"
+                           managed="false" visible="false"/>
+
+                    <VBox spacing="6">
+                        <Label text="Free savings over the next 12 months" styleClass="section-title"/>
+                        <LineChart fx:id="savingsChart" prefHeight="280" animated="false" createSymbols="true">
+                            <xAxis><NumberAxis label="Month" lowerBound="0" upperBound="12" tickUnit="1"
+                                               autoRanging="false"/></xAxis>
+                            <yAxis><NumberAxis forceZeroInRange="false"/></yAxis>
+                        </LineChart>
+                    </VBox>
+
+                    <VBox spacing="10">
+                        <Label text="Effect on your goals" styleClass="section-title"/>
+                        <TableView fx:id="goalsTable" prefHeight="170">
+                            <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN"/></columnResizePolicy>
+                            <columns>
+                                <TableColumn fx:id="goalNameCol" text="GOAL" prefWidth="160"/>
+                                <TableColumn fx:id="goalEtaCol" text="READY BY (WITHOUT → WITH)" prefWidth="230"/>
+                                <TableColumn fx:id="goalDelayCol" text="DELAY" prefWidth="170"/>
+                                <TableColumn fx:id="goalDeadlineCol" text="DEADLINE" prefWidth="120"/>
+                            </columns>
+                            <placeholder><Label text="No active goals."/></placeholder>
+                        </TableView>
+                    </VBox>
+
+                    <VBox spacing="10">
+                        <Label text="Commitments that end within a year" styleClass="section-title"/>
+                        <TableView fx:id="commitmentTable" prefHeight="150">
+                            <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN"/></columnResizePolicy>
+                            <columns>
+                                <TableColumn fx:id="commitmentNameCol" text="COMMITMENT" prefWidth="200"/>
+                                <TableColumn fx:id="commitmentEndCol" text="ENDS" prefWidth="200"/>
+                                <TableColumn fx:id="commitmentAmountCol" text="FREES UP / MONTH" prefWidth="180"/>
+                            </columns>
+                            <placeholder><Label text="None end in the next twelve months."/></placeholder>
+                        </TableView>
+                    </VBox>
+
+                    <VBox fx:id="warningsBox" spacing="8"/>
+                </VBox>
             </VBox>
-        </VBox>
+        </HBox>
     </content>
 </ScrollPane>

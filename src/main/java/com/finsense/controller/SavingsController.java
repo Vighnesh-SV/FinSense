@@ -68,19 +68,19 @@ public class SavingsController extends BaseController {
         contributionDatePicker.setValue(LocalDate.now());
 
         nameCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().name()));
-        targetCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().targetAmount().format()));
-        savedCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().savedAmount().format()));
-        remainingCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().remainingAmount().format()));
+        UiKit.money(targetCol, SavingsGoal::targetAmount);
+        UiKit.money(savedCol, SavingsGoal::savedAmount);
+        UiKit.money(remainingCol, SavingsGoal::remainingAmount);
         progressCol.setCellValueFactory(c -> new SimpleStringProperty(
                 String.format("%.0f%%", c.getValue().progressPercent())));
-        deadlineCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().deadline().toString()));
-        priorityCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().priority().name()));
-        statusCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().status().name()));
+        deadlineCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().deadline().format(UiKit.SHORT_DAY)));
+        priorityCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().priority().toString()));
+        statusCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().status().toString()));
         monthlyCol.setCellValueFactory(c -> new SimpleStringProperty(
                 service.requiredMonthlyAmount(c.getValue(), LocalDate.now()).format()));
 
-        contributionDateCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().contributedOn().toString()));
-        contributionAmountCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().amount().format()));
+        contributionDateCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().contributedOn().format(UiKit.DAY)));
+        UiKit.money(contributionAmountCol, c -> c.amount());
         contributionNoteCol.setCellValueFactory(c -> new SimpleStringProperty(
                 c.getValue().note() == null ? "" : c.getValue().note()));
 

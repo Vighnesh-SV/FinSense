@@ -15,9 +15,8 @@ import java.util.Map;
 /**
  * Controller of main_layout.fxml: the sidebar, the header and the content area.
  *
- * The sidebar is defined only once. Clicking a sidebar button loads that
- * screen's FXML and puts it into the centre (contentArea) - the rest of the
- * window stays the same.
+ * The sidebar is defined only once. Clicking a sidebar button loads that screen's
+ * FXML into the centre (contentArea); the rest of the window stays the same.
  */
 public class MainController extends BaseController {
 
@@ -25,16 +24,18 @@ public class MainController extends BaseController {
 
     @FXML private StackPane contentArea;
     @FXML private Label pageTitle;
+    @FXML private Label pageSubtitle;
     @FXML private Label userName;
     @FXML private Label userInitial;
 
     @FXML private Button navDashboard;
-    @FXML private Button navTransactions;
-    @FXML private Button navSavings;
-    @FXML private Button navAdvisor;
-    @FXML private Button navHistory;
-    @FXML private Button navSimulator;
     @FXML private Button navInsights;
+    @FXML private Button navAdvisor;
+    @FXML private Button navSimulator;
+    @FXML private Button navHistory;
+    @FXML private Button navTransactions;
+    @FXML private Button navBudgets;
+    @FXML private Button navSavings;
     @FXML private Button navProfile;
 
     /** EnumMap: a Map whose keys are enum constants - compact and fast. */
@@ -46,12 +47,13 @@ public class MainController extends BaseController {
     @FXML
     private void initialize() {
         navButtons.put(Screen.DASHBOARD, navDashboard);
-        navButtons.put(Screen.TRANSACTIONS, navTransactions);
-        navButtons.put(Screen.SAVINGS_GOALS, navSavings);
-        navButtons.put(Screen.PURCHASE_ADVISOR, navAdvisor);
-        navButtons.put(Screen.PURCHASE_HISTORY, navHistory);
-        navButtons.put(Screen.SIMULATOR, navSimulator);
         navButtons.put(Screen.INSIGHTS, navInsights);
+        navButtons.put(Screen.PURCHASE_ADVISOR, navAdvisor);
+        navButtons.put(Screen.SIMULATOR, navSimulator);
+        navButtons.put(Screen.PURCHASE_HISTORY, navHistory);
+        navButtons.put(Screen.TRANSACTIONS, navTransactions);
+        navButtons.put(Screen.BUDGETS, navBudgets);
+        navButtons.put(Screen.SAVINGS_GOALS, navSavings);
         navButtons.put(Screen.PROFILE, navProfile);
 
         // Event handling with lambdas: each button navigates to its own screen.
@@ -76,6 +78,7 @@ public class MainController extends BaseController {
             contentArea.getChildren().setAll(view.root());
             currentScreen = screen;
             pageTitle.setText(screen.title());
+            pageSubtitle.setText(screen.description());
             navButtons.values().forEach(b -> b.getStyleClass().remove("active"));
             navButtons.get(screen).getStyleClass().add("active");
         });
@@ -91,7 +94,7 @@ public class MainController extends BaseController {
     @FXML
     private void onLogout() {
         if (confirm("Log out", "Do you want to log out of FinSense?")) {
-            new UserService().logout();   // delegates SessionManager.logout() via the service layer
+            new UserService().logout();
             SceneManager.showAuthScreen(LOGIN_SCREEN);
         }
     }

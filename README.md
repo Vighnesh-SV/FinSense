@@ -21,12 +21,27 @@ Run the complete suite with `mvnw.cmd clean test`. The suite uses JUnit and the 
 
 ## Viva demo account
 
-On the login screen choose **Load viva demo account**. This creates or signs into the reusable demo user and seeds its profile, recurring rent and car EMI, sample transactions, savings goals, behaviour questionnaire and evaluated purchases once.
+On the login screen choose **Open the viva demo account**. The demo user is **rebuilt from scratch on every click**, so each demonstration starts from the same data: six months of income and spending, rent and a car EMI, three savings goals, four budgets, one unusually large dining expense, a completed questionnaire, and five purchase evaluations (three bought and rated).
 
 - Username: `demo_viva`
 - Password: `DemoPass2026`
 
-The seed is idempotent: subsequent clicks sign into the same account without duplicating the sample data. The EMI ends soon relative to the current date so the simulator can demonstrate a changing commitment timeline.
+Anything changed in the demo account is discarded the next time it is opened.
+
+## Intelligence features
+
+| Feature | Where | How it works |
+|---|---|---|
+| Learns from feedback | Purchase history → *Worth it / Neutral / Regret* | `LearnedPreferenceRule` adjusts the score by up to ±15 from your ratings in the same category (≥2 ratings) or same need/want (≥3). |
+| Spending forecast | Insights, Dashboard | `ForecastService`: least-squares trend over up to 6 complete months (average when fewer than 3). |
+| Unusual spending | Insights, Dashboard | `AnomalyService`: robust z-score (median / MAD) per category, last 60 days vs. the past year. |
+| Smart timing | Advisor, Simulator | For WAIT/AVOID, `DecisionEngine.affordableFrom` finds the first month the item fits without touching the emergency reserve. |
+| Budgets | Budgets screen | Monthly limit per category; `BudgetRule` lowers the score when a purchase would break one. |
+| Monthly report | Insights → *Export monthly report* | `ReportService` writes a printable HTML file (open in a browser, Print → Save as PDF). |
+
+## Screenshots of every screen
+
+`mvnw.cmd test -Dtest=ScreenshotTour -Dfinsense.shots=target/shots` renders each screen with the demo data into PNG files. It uses the `finsense_test` database, never the real one.
 
 ## Project layout
 

@@ -10,44 +10,58 @@
             fitToWidth="true"
             styleClass="content-scroll">
     <content>
-        <VBox spacing="16" styleClass="content-area">
+        <VBox spacing="24" styleClass="content-area">
             <padding>
-                <Insets top="24" right="28" bottom="28" left="28"/>
+                <Insets top="28" right="36" bottom="36" left="36"/>
             </padding>
 
-            <VBox styleClass="card" spacing="12">
-                <Label text="Purchase history" styleClass="card-title"/>
-                <TableView fx:id="purchaseTable" prefHeight="220" styleClass="table-view">
+            <VBox styleClass="card" spacing="16">
+                <Label text="Every evaluation you have asked for" styleClass="card-title"/>
+                <TableView fx:id="purchaseTable" prefHeight="280">
+                    <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN"/></columnResizePolicy>
                     <columns>
-                        <TableColumn fx:id="productCol" text="Product" prefWidth="220"/>
-                        <TableColumn fx:id="priceCol" text="Price" prefWidth="130"/>
-                        <TableColumn fx:id="verdictCol" text="Latest verdict" prefWidth="140"/>
-                        <TableColumn fx:id="scoreCol" text="Score" prefWidth="85"/>
-                        <TableColumn fx:id="statusCol" text="Status" prefWidth="130"/>
+                        <TableColumn fx:id="productCol" text="ITEM" prefWidth="220"/>
+                        <TableColumn fx:id="priceCol" text="PRICE" prefWidth="130"/>
+                        <TableColumn fx:id="verdictCol" text="VERDICT" prefWidth="140"/>
+                        <TableColumn fx:id="scoreCol" text="SCORE" prefWidth="85"/>
+                        <TableColumn fx:id="statusCol" text="STATUS" prefWidth="120"/>
+                        <TableColumn fx:id="feedbackCol" text="YOUR RATING" prefWidth="120"/>
                     </columns>
                     <placeholder>
                         <Label text="No purchase evaluations yet." styleClass="muted"/>
                     </placeholder>
                 </TableView>
-                <HBox spacing="8" alignment="CENTER_LEFT">
+                <HBox spacing="10" alignment="CENTER_LEFT">
                     <Button fx:id="reevaluateButton" text="Re-evaluate" onAction="#onReevaluate" styleClass="btn-primary" disable="true"/>
-                    <Button fx:id="purchasedButton" text="Mark as Purchased" onAction="#onMarkPurchased" styleClass="btn-secondary" disable="true"/>
-                    <Button fx:id="droppedButton" text="Mark as Dropped" onAction="#onMarkDropped" styleClass="btn-danger" disable="true"/>
-                    <CheckBox fx:id="deductSavingsCheck" text="Also deduct cost from free savings"/>
+                    <Button fx:id="purchasedButton" text="I bought it" onAction="#onMarkPurchased" styleClass="btn-secondary" disable="true"/>
+                    <Button fx:id="droppedButton" text="I dropped it" onAction="#onMarkDropped" styleClass="btn-danger" disable="true"/>
+                    <CheckBox fx:id="deductSavingsCheck" text="Also take the cost out of free savings"/>
+                </HBox>
+                <HBox fx:id="feedbackBar" styleClass="card-quiet" spacing="10" alignment="CENTER_LEFT"
+                      managed="false" visible="false">
+                    <VBox spacing="2" HBox.hgrow="ALWAYS">
+                        <Label text="How do you feel about this purchase now?" styleClass="section-title"/>
+                        <Label text="FinSense learns from your answers and adjusts future advice for similar items."
+                               styleClass="muted" wrapText="true"/>
+                    </VBox>
+                    <Button fx:id="worthItButton" text="Worth it" onAction="#onWorthIt" styleClass="chip"/>
+                    <Button fx:id="neutralButton" text="Neutral" onAction="#onNeutral" styleClass="chip"/>
+                    <Button fx:id="regretButton" text="Regret it" onAction="#onRegret" styleClass="chip"/>
                 </HBox>
             </VBox>
 
-            <VBox styleClass="card" spacing="10">
-                <Label text="Evaluation details" styleClass="card-title"/>
-                <TableView fx:id="historyTable" prefHeight="190" styleClass="table-view">
+            <VBox styleClass="card" spacing="16">
+                <Label text="How the verdict changed over time" styleClass="card-title"/>
+                <TableView fx:id="historyTable" prefHeight="200">
+                    <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN"/></columnResizePolicy>
                     <columns>
-                        <TableColumn fx:id="evaluatedCol" text="Evaluated at" prefWidth="180"/>
-                        <TableColumn fx:id="historyVerdictCol" text="Verdict" prefWidth="100"/>
-                        <TableColumn fx:id="historyScoreCol" text="Score" prefWidth="70"/>
-                        <TableColumn fx:id="expenseCol" text="Expenses snapshot" prefWidth="145"/>
-                        <TableColumn fx:id="disposableCol" text="Disposable snapshot" prefWidth="155"/>
-                        <TableColumn fx:id="freeSavingsCol" text="Free savings snapshot" prefWidth="155"/>
-                        <TableColumn fx:id="behaviourCol" text="Behaviour" prefWidth="130"/>
+                        <TableColumn fx:id="evaluatedCol" text="EVALUATED" prefWidth="180"/>
+                        <TableColumn fx:id="historyVerdictCol" text="VERDICT" prefWidth="100"/>
+                        <TableColumn fx:id="historyScoreCol" text="SCORE" prefWidth="70"/>
+                        <TableColumn fx:id="expenseCol" text="EXPENSES THEN" prefWidth="145"/>
+                        <TableColumn fx:id="disposableCol" text="DISPOSABLE THEN" prefWidth="155"/>
+                        <TableColumn fx:id="freeSavingsCol" text="FREE SAVINGS THEN" prefWidth="155"/>
+                        <TableColumn fx:id="behaviourCol" text="PERSONALITY" prefWidth="130"/>
                     </columns>
                     <placeholder>
                         <Label text="Select a purchase to see all its evaluations." styleClass="muted"/>
@@ -55,13 +69,13 @@
                 </TableView>
                 <Label text="Compare two evaluations" styleClass="section-title"/>
                 <HBox spacing="14">
-                    <VBox styleClass="kpi-card" spacing="8" HBox.hgrow="ALWAYS">
+                    <VBox styleClass="card-quiet" spacing="10" HBox.hgrow="ALWAYS">
                         <ComboBox fx:id="compareLeft" promptText="First evaluation" maxWidth="Infinity"/>
-                        <Label fx:id="leftComparison" text="Select two evaluations to compare." styleClass="muted" wrapText="true"/>
+                        <Label fx:id="leftComparison" text="Select two evaluations to compare." styleClass="body-text" wrapText="true"/>
                     </VBox>
-                    <VBox styleClass="kpi-card" spacing="8" HBox.hgrow="ALWAYS">
+                    <VBox styleClass="card-quiet" spacing="10" HBox.hgrow="ALWAYS">
                         <ComboBox fx:id="compareRight" promptText="Second evaluation" maxWidth="Infinity"/>
-                        <Label fx:id="rightComparison" text="" styleClass="muted" wrapText="true"/>
+                        <Label fx:id="rightComparison" text="" styleClass="body-text" wrapText="true"/>
                     </VBox>
                 </HBox>
             </VBox>

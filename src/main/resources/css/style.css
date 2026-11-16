@@ -1,142 +1,251 @@
-/* ===== FinSense – main application layout (used with base.css) ===== */
+/* ===== FinSense - application shell and screen components (with base.css) ===== */
 
-.app-root {
-    -fx-background-color: -fs-bg;
-}
+.app-root { -fx-background-color: -fs-paper; }
 
 /* ---------- Sidebar ---------- */
 .sidebar {
-    -fx-background-color: -fs-navy;
-    -fx-padding: 22 14 18 14;
+    -fx-background-color: #1b2621;
+    -fx-padding: 26 14 20 14;
 }
-
-.sidebar-brand {
-    -fx-padding: 0 10 14 10;
-}
-
+.sidebar-brand { -fx-padding: 0 12 22 12; }
 .sidebar-title {
-    -fx-text-fill: white;
-    -fx-font-size: 22px;
-    -fx-font-weight: bold;
+    -fx-font-family: "Georgia", serif;
+    -fx-font-size: 23px;
+    -fx-text-fill: #fffdf8;
 }
-
-.sidebar-tagline {
-    -fx-text-fill: derive(-fs-teal, 35%);
-    -fx-font-size: 11px;
+.sidebar-tagline { -fx-text-fill: #8f9a92; -fx-font-size: 11px; }
+.brand-mark {
+    -fx-background-color: -fs-brass;
+    -fx-min-width: 8; -fx-min-height: 8; -fx-max-width: 8; -fx-max-height: 8;
+    -fx-background-radius: 2;
 }
 
 .nav-section {
-    -fx-text-fill: #7f8db0;
-    -fx-font-size: 10px;
+    -fx-text-fill: #6f7b73;
+    -fx-font-size: 10.5px;
     -fx-font-weight: bold;
-    -fx-padding: 14 10 4 10;
+    -fx-padding: 18 12 6 12;
 }
-
 .nav-button {
     -fx-background-color: transparent;
-    -fx-text-fill: #c9d2e6;
+    -fx-text-fill: #c4ccc6;
     -fx-alignment: CENTER_LEFT;
-    -fx-padding: 9 12 9 12;
-    -fx-background-radius: 8;
-    -fx-font-size: 13px;
+    -fx-padding: 9 12 9 14;
+    -fx-background-radius: 6;
+    -fx-font-size: 13.5px;
+    -fx-font-weight: normal;
+    -fx-border-width: 0 0 0 3;
+    -fx-border-color: transparent;
 }
-.nav-button:hover {
-    -fx-background-color: -fs-navy-light;
-    -fx-text-fill: white;
-}
+.nav-button:hover { -fx-background-color: #25332c; -fx-text-fill: #fffdf8; }
 .nav-button.active {
-    -fx-background-color: -fs-teal;
-    -fx-text-fill: white;
+    -fx-background-color: #2a3a32;
+    -fx-text-fill: #fffdf8;
     -fx-font-weight: bold;
+    -fx-border-color: -fs-brass;
 }
-
 .logout-button {
     -fx-background-color: transparent;
-    -fx-border-color: #34456b;
-    -fx-border-radius: 8;
-    -fx-text-fill: #c9d2e6;
+    -fx-border-color: #34443b;
+    -fx-text-fill: #c4ccc6;
     -fx-alignment: CENTER_LEFT;
-    -fx-padding: 9 12 9 12;
+    -fx-font-weight: normal;
+    -fx-padding: 9 14 9 14;
 }
-.logout-button:hover {
-    -fx-background-color: -fs-avoid;
-    -fx-border-color: -fs-avoid;
-    -fx-text-fill: white;
-}
+.logout-button:hover { -fx-background-color: #25332c; -fx-text-fill: #fffdf8; }
 
 /* ---------- Header ---------- */
 .header {
-    -fx-background-color: white;
-    -fx-border-color: transparent transparent -fs-border transparent;
-    -fx-padding: 14 28 14 28;
+    -fx-background-color: -fs-paper;
+    -fx-border-color: transparent transparent -fs-line transparent;
+    -fx-padding: 22 36 18 36;
 }
-
-.page-title {
-    -fx-font-size: 22px;
-    -fx-font-weight: bold;
-    -fx-text-fill: -fs-navy;
-}
-
+.page-subtitle { -fx-text-fill: -fs-muted; -fx-font-size: 13px; }
 .user-chip {
-    -fx-background-color: -fs-bg;
+    -fx-background-color: -fs-surface;
+    -fx-border-color: -fs-line;
     -fx-background-radius: 999;
+    -fx-border-radius: 999;
     -fx-padding: 4 14 4 4;
 }
-
 .avatar {
-    -fx-background-color: -fs-teal;
+    -fx-background-color: -fs-green;
     -fx-text-fill: white;
     -fx-font-weight: bold;
-    -fx-min-width: 30;
-    -fx-min-height: 30;
+    -fx-min-width: 30; -fx-min-height: 30;
     -fx-alignment: CENTER;
     -fx-background-radius: 999;
 }
+.user-name { -fx-font-size: 13px; -fx-text-fill: -fs-ink; }
 
-.user-name {
-    -fx-font-size: 13px;
-    -fx-text-fill: -fs-navy;
-}
+/* ---------- Content ---------- */
+.content-scroll, .content-scroll > .viewport { -fx-background-color: transparent; -fx-background: -fs-paper; }
+.content-area { -fx-background-color: -fs-paper; }
 
-/* ---------- Content area ---------- */
-.content-scroll,
-.content-scroll > .viewport {
-    -fx-background-color: transparent;
-    -fx-background: -fs-bg;
-}
-
-.content-area {
-    -fx-background-color: -fs-bg;
-}
-
-/* ---------- KPI cards (dashboard, insights) ---------- */
+/* ---------- KPI tiles ---------- */
 .kpi-card {
-    -fx-background-color: white;
-    -fx-background-radius: 14;
-    -fx-border-color: -fs-border;
-    -fx-border-radius: 14;
+    -fx-background-color: -fs-surface;
+    -fx-background-radius: 10;
+    -fx-border-color: -fs-line;
+    -fx-border-radius: 10;
     -fx-padding: 16 18 16 18;
+    -fx-spacing: 6;
 }
-.kpi-label { -fx-text-fill: -fs-muted; -fx-font-size: 12px; }
-.kpi-value { -fx-text-fill: -fs-navy; -fx-font-size: 22px; -fx-font-weight: bold; }
+.kpi-label { -fx-text-fill: -fs-muted; -fx-font-size: 11px; -fx-font-weight: bold; }
+.kpi-value { -fx-text-fill: -fs-ink; -fx-font-size: 22px; -fx-font-weight: bold; }
+.kpi-note  { -fx-text-fill: -fs-muted; -fx-font-size: 11.5px; }
+.kpi-accent { -fx-border-color: transparent transparent transparent -fs-green; -fx-border-width: 0 0 0 3; }
 
 /* ---------- Tables ---------- */
 .table-view {
-    -fx-background-color: white;
-    -fx-background-radius: 10;
-    -fx-border-color: -fs-border;
-    -fx-border-radius: 10;
+    -fx-background-color: -fs-surface;
+    -fx-border-color: -fs-line;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 0;
+    -fx-table-cell-border-color: transparent;
 }
-.table-view .column-header-background { -fx-background-color: #f7f9fb; }
-.table-view .column-header .label     { -fx-font-weight: bold; -fx-text-fill: -fs-muted; }
-.table-row-cell:selected              { -fx-background-color: #d9f0ed; }
-.table-row-cell:selected .text        { -fx-fill: -fs-text; }
+.table-view:focused { -fx-background-insets: 0; -fx-border-color: -fs-line; }
+.table-view .column-header-background {
+    -fx-background-color: -fs-surface-alt;
+    -fx-background-radius: 8 8 0 0;
+    -fx-border-color: transparent transparent -fs-line transparent;
+}
+.table-view .column-header, .table-view .filler {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-pref-height: 36;
+}
+.table-view .column-header .label {
+    -fx-text-fill: -fs-muted;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 0 0 0 6;
+}
+.table-row-cell {
+    -fx-background-color: -fs-surface;
+    -fx-cell-size: 38;
+    -fx-border-color: transparent transparent #efebe1 transparent;
+}
+.table-row-cell:odd { -fx-background-color: #fcfaf4; }
+.table-row-cell:hover { -fx-background-color: -fs-surface-alt; }
+.table-row-cell:selected { -fx-background-color: -fs-green-tint; }
+.table-row-cell:selected .table-cell { -fx-text-fill: -fs-ink; }
+.table-row-cell:empty { -fx-background-color: transparent; -fx-border-color: transparent; }
+.table-cell { -fx-padding: 0 8 0 12; -fx-text-fill: -fs-ink; -fx-alignment: CENTER_LEFT; }
+.table-cell.money, .money { -fx-alignment: CENTER_RIGHT; -fx-padding: 0 16 0 8; }
+.table-view .column-header.money .label { -fx-alignment: CENTER_RIGHT; -fx-padding: 0 10 0 0; }
+.table-view .placeholder .label { -fx-text-fill: -fs-muted; }
 
-/* ---------- Progress bars (savings goals) ---------- */
-.progress-bar > .bar   { -fx-background-color: -fs-teal; -fx-background-radius: 6; }
-.progress-bar > .track { -fx-background-color: #e8edf2; -fx-background-radius: 6; }
+/* ---------- Lists ---------- */
+.list-view {
+    -fx-background-color: -fs-surface;
+    -fx-border-color: -fs-line;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 4;
+}
+.list-view .list-cell { -fx-padding: 9 12 9 12; -fx-background-color: transparent; -fx-text-fill: -fs-ink; }
+.list-view .list-cell:filled:hover { -fx-background-color: -fs-surface-alt; }
+.list-view .list-cell:filled:selected { -fx-background-color: -fs-green-tint; -fx-text-fill: -fs-ink; }
 
-/* ---------- Value indicators ---------- */
-.text-danger { -fx-text-fill: -fs-avoid !important; }
-.text-positive { -fx-text-fill: -fs-buy !important; }
+/* ---------- Progress ---------- */
+.progress-bar { -fx-pref-height: 8; }
+.progress-bar > .bar { -fx-background-color: -fs-green; -fx-background-radius: 4; -fx-background-insets: 0; -fx-padding: 4; }
+.progress-bar > .track { -fx-background-color: #e9e4d8; -fx-background-radius: 4; -fx-background-insets: 0; }
+.progress-bar.over > .bar { -fx-background-color: -fs-avoid; }
+.progress-bar.near > .bar { -fx-background-color: -fs-brass; }
 
+/* ---------- Reason list (purchase advisor) ---------- */
+.reason-row { -fx-padding: 9 0 9 0; -fx-border-color: transparent transparent #efebe1 transparent; -fx-spacing: 12; }
+.reason-dot { -fx-min-width: 8; -fx-min-height: 8; -fx-max-width: 8; -fx-max-height: 8; -fx-background-radius: 999; -fx-background-color: -fs-line-strong; }
+.reason-dot.good  { -fx-background-color: -fs-buy; }
+.reason-dot.warn  { -fx-background-color: -fs-brass; }
+.reason-dot.bad   { -fx-background-color: -fs-avoid; }
+.reason-dot.learn { -fx-background-color: -fs-wait; }
+
+/* ---------- Verdict hero ---------- */
+.verdict-hero {
+    -fx-background-color: -fs-surface-alt;
+    -fx-background-radius: 10;
+    -fx-padding: 22 24 22 24;
+    -fx-border-width: 0 0 0 5;
+    -fx-border-color: -fs-muted;
+    -fx-border-radius: 10 0 0 10;
+}
+.verdict-hero.v-buy      { -fx-border-color: -fs-buy; }
+.verdict-hero.v-consider { -fx-border-color: -fs-consider; }
+.verdict-hero.v-wait     { -fx-border-color: -fs-wait; }
+.verdict-hero.v-avoid    { -fx-border-color: -fs-avoid; }
+.verdict-word { -fx-font-family: "Georgia", serif; -fx-font-size: 40px; -fx-text-fill: -fs-ink; }
+.verdict-word.v-buy      { -fx-text-fill: -fs-buy; }
+.verdict-word.v-consider { -fx-text-fill: -fs-consider; }
+.verdict-word.v-wait     { -fx-text-fill: -fs-wait; }
+.verdict-word.v-avoid    { -fx-text-fill: -fs-avoid; }
+.score-value { -fx-font-size: 30px; -fx-font-weight: bold; -fx-text-fill: -fs-ink; }
+.timing-note {
+    -fx-background-color: -fs-brass-tint;
+    -fx-text-fill: #6e4e17;
+    -fx-background-radius: 6;
+    -fx-padding: 10 14 10 14;
+}
+.warning-note {
+    -fx-background-color: -fs-avoid-tint;
+    -fx-text-fill: #7a2f20;
+    -fx-background-radius: 6;
+    -fx-padding: 10 14 10 14;
+}
+.info-note {
+    -fx-background-color: -fs-green-tint;
+    -fx-text-fill: -fs-green-dark;
+    -fx-background-radius: 6;
+    -fx-padding: 10 14 10 14;
+}
+
+/* ---------- Anomaly rows ---------- */
+.alert-row {
+    -fx-background-color: -fs-surface-alt;
+    -fx-background-radius: 8;
+    -fx-padding: 12 14 12 14;
+    -fx-border-width: 0 0 0 3;
+    -fx-border-color: -fs-brass;
+    -fx-spacing: 2;
+}
+.alert-amount { -fx-font-weight: bold; -fx-font-size: 14px; }
+
+/* ---------- Empty states ---------- */
+.empty-state { -fx-padding: 28 0 28 0; -fx-alignment: CENTER; }
+.empty-state .label { -fx-text-fill: -fs-muted; }
+
+/* ---------- Charts ---------- */
+.chart { -fx-padding: 4 0 0 0; }
+.chart-plot-background { -fx-background-color: transparent; }
+.chart-vertical-grid-lines { -fx-stroke: transparent; }
+.chart-horizontal-grid-lines { -fx-stroke: #ebe5d8; }
+.chart-alternative-row-fill { -fx-fill: transparent; }
+.chart-vertical-zero-line, .chart-horizontal-zero-line { -fx-stroke: -fs-line-strong; }
+.axis { -fx-tick-label-fill: -fs-muted; -fx-tick-label-font-size: 11px; }
+.axis-label { -fx-text-fill: -fs-muted; -fx-font-size: 11px; }
+.axis-tick-mark, .axis-minor-tick-mark { -fx-stroke: transparent; }
+.chart-legend { -fx-background-color: transparent; -fx-padding: 6 0 0 0; }
+.chart-legend-item { -fx-text-fill: -fs-ink-soft; -fx-font-size: 12px; }
+
+.default-color0.chart-bar { -fx-bar-fill: -fs-green; -fx-background-radius: 3 3 0 0; }
+.default-color1.chart-bar { -fx-bar-fill: #c9a466; -fx-background-radius: 3 3 0 0; }
+.default-color0.chart-series-line { -fx-stroke: -fs-green; -fx-stroke-width: 2.5; }
+.default-color1.chart-series-line { -fx-stroke: -fs-avoid; -fx-stroke-width: 2.5; -fx-stroke-dash-array: 6 4; }
+.default-color0.chart-line-symbol { -fx-background-color: -fs-green, -fs-surface; -fx-background-radius: 5; }
+.default-color1.chart-line-symbol { -fx-background-color: -fs-avoid, -fs-surface; -fx-background-radius: 5; }
+
+.default-color0.chart-pie { -fx-pie-color: #2d5a45; }
+.default-color1.chart-pie { -fx-pie-color: #b07d2b; }
+.default-color2.chart-pie { -fx-pie-color: #6f8f7c; }
+.default-color3.chart-pie { -fx-pie-color: #d6b680; }
+.default-color4.chart-pie { -fx-pie-color: #5d6688; }
+.default-color5.chart-pie { -fx-pie-color: #a3412d; }
+.default-color6.chart-pie { -fx-pie-color: #9fb4a6; }
+.default-color7.chart-pie { -fx-pie-color: #7b827c; }
+.chart-pie { -fx-background-color: -fx-pie-color; -fx-border-color: -fs-surface; -fx-border-width: 2; }
+.chart-pie-label { -fx-fill: -fs-ink-soft; -fx-font-size: 11px; }
+.chart-pie-label-line { -fx-stroke: -fs-line-strong; }

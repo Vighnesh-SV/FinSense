@@ -62,10 +62,10 @@ class FxmlLoadingTest {
             SceneManager.View<MainController> view = SceneManager.load("/fxml/main_layout.fxml");
             view.controller().navigate(Screen.PURCHASE_ADVISOR);
             Button active = (Button) view.root().lookup(".nav-button.active");
-            assertEquals("Purchase Advisor", active.getText());
+            assertEquals("Purchase advisor", active.getText());
             return ((Label) view.root().lookup(".page-title")).getText();
         });
-        assertEquals("Purchase Advisor", title);
+        assertEquals("Purchase advisor", title);
     }
 
     @Test
@@ -102,6 +102,9 @@ class FxmlLoadingTest {
 
         SceneManager.View<Object> insights = onFxThread(() -> SceneManager.load("/fxml/insights.fxml"));
         assertInstanceOf(InsightsController.class, insights.controller());
+
+        SceneManager.View<Object> budgets = onFxThread(() -> SceneManager.load("/fxml/budgets.fxml"));
+        assertInstanceOf(BudgetsController.class, budgets.controller());
     }
 
     @Test

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- Purchase advisor: the question (left) and FinSense's answer (right). -->
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -10,55 +12,91 @@
             fitToWidth="true"
             styleClass="content-scroll">
     <content>
-        <VBox spacing="18" styleClass="content-area">
+        <HBox spacing="24" styleClass="content-area">
             <padding>
-                <Insets top="24" right="28" bottom="28" left="28"/>
+                <Insets top="28" right="36" bottom="36" left="36"/>
             </padding>
 
-            <VBox styleClass="card" spacing="14">
-                <Label text="Purchase Advisor" styleClass="card-title"/>
-                <Label text="Share a purchase idea to see how it fits your current finances." styleClass="muted" wrapText="true"/>
-                <GridPane hgap="14" vgap="12">
-                    <columnConstraints>
-                        <ColumnConstraints percentWidth="50"/>
-                        <ColumnConstraints percentWidth="50"/>
-                    </columnConstraints>
-                    <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="0">
-                        <Label text="PRODUCT" styleClass="field-label"/>
-                        <TextField fx:id="productNameField" promptText="e.g. Smartphone"/>
+            <!-- The question -->
+            <VBox styleClass="card" spacing="18" prefWidth="400" minWidth="360" maxHeight="-Infinity">
+                <VBox spacing="4">
+                    <Label text="What are you thinking of buying?" styleClass="card-title"/>
+                    <Label text="FinSense checks it against your income, savings, goals, budgets and habits."
+                           styleClass="muted" wrapText="true"/>
+                </VBox>
+
+                <VBox spacing="6">
+                    <Label text="Item" styleClass="field-label"/>
+                    <TextField fx:id="productNameField" promptText="e.g. Noise-cancelling headphones"/>
+                </VBox>
+
+                <HBox spacing="14">
+                    <VBox spacing="6" HBox.hgrow="ALWAYS">
+                        <Label text="Price (₹)" styleClass="field-label"/>
+                        <TextField fx:id="priceField" promptText="e.g. 12,000"/>
                     </VBox>
-                    <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="0">
-                        <Label text="PRICE (₹)" styleClass="field-label"/>
-                        <TextField fx:id="priceField" promptText="e.g. 25000"/>
-                    </VBox>
-                    <VBox spacing="4" GridPane.columnIndex="0" GridPane.rowIndex="1">
-                        <Label text="CATEGORY" styleClass="field-label"/>
-                        <ComboBox fx:id="categoryCombo" promptText="Choose expense category" maxWidth="Infinity"/>
-                    </VBox>
-                    <VBox spacing="4" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                        <Label text="NEED OR WANT?" styleClass="field-label"/>
+                    <VBox spacing="6" HBox.hgrow="ALWAYS">
+                        <Label text="Need or want?" styleClass="field-label"/>
                         <ComboBox fx:id="necessityCombo" maxWidth="Infinity"/>
                     </VBox>
-                    <VBox spacing="4" GridPane.columnSpan="2" GridPane.rowIndex="2">
-                        <Label text="DESCRIPTION (OPTIONAL)" styleClass="field-label"/>
-                        <TextArea fx:id="descriptionField" promptText="Add context for this purchase" prefRowCount="2" wrapText="true"/>
-                    </VBox>
-                </GridPane>
+                </HBox>
+
+                <VBox spacing="6">
+                    <Label text="Category" styleClass="field-label"/>
+                    <ComboBox fx:id="categoryCombo" promptText="Choose a category" maxWidth="Infinity"
+                              visibleRowCount="8"/>
+                </VBox>
+
+                <VBox spacing="6">
+                    <Label text="Notes (optional)" styleClass="field-label"/>
+                    <TextArea fx:id="descriptionField" promptText="Why do you want it? Any deadline?"
+                              prefRowCount="3" wrapText="true"/>
+                </VBox>
+
                 <Label fx:id="errorLabel" styleClass="error-label" managed="false" visible="false" wrapText="true"/>
-                <Button fx:id="evaluateButton" text="Evaluate purchase" onAction="#onEvaluate" styleClass="btn-primary"/>
+
+                <Button fx:id="evaluateButton" text="Ask FinSense" onAction="#onEvaluate"
+                        styleClass="btn-primary" maxWidth="Infinity" defaultButton="true"/>
             </VBox>
 
-            <VBox fx:id="resultCard" styleClass="card" spacing="12" managed="false" visible="false">
-                <HBox alignment="CENTER_LEFT" spacing="14">
-                    <Label text="Recommendation" styleClass="section-title"/>
-                    <Label fx:id="verdictLabel" text="WAIT" styleClass="badge"/>
-                    <Label fx:id="scoreLabel" text="0 / 100" styleClass="muted"/>
-                </HBox>
-                <Label text="Why" styleClass="section-title"/>
-                <ListView fx:id="explanationList" prefHeight="190"/>
-                <Label text="Warnings" styleClass="section-title"/>
-                <ListView fx:id="warningsList" prefHeight="90"/>
+            <!-- The answer -->
+            <VBox styleClass="card" spacing="18" HBox.hgrow="ALWAYS" maxHeight="-Infinity">
+                <VBox fx:id="emptyState" styleClass="empty-state" spacing="8">
+                    <Label text="Your verdict will appear here" styleClass="card-title"/>
+                    <Label text="Fill in the item on the left and press Ask FinSense." styleClass="muted"/>
+                </VBox>
+
+                <VBox fx:id="resultCard" spacing="18" managed="false" visible="false">
+                    <HBox fx:id="verdictHero" styleClass="verdict-hero" alignment="CENTER_LEFT" spacing="24">
+                        <VBox spacing="2" HBox.hgrow="ALWAYS">
+                            <Label text="FINSENSE SUGGESTS" styleClass="eyebrow"/>
+                            <Label fx:id="verdictLabel" text="WAIT" styleClass="verdict-word"/>
+                            <Label fx:id="verdictSummary" text="" styleClass="muted" wrapText="true"/>
+                        </VBox>
+                        <VBox spacing="6" alignment="CENTER_RIGHT" minWidth="140">
+                            <Label text="SCORE" styleClass="eyebrow"/>
+                            <Label fx:id="scoreLabel" text="0" styleClass="score-value"/>
+                            <ProgressBar fx:id="scoreBar" progress="0" prefWidth="140"/>
+                        </VBox>
+                    </HBox>
+
+                    <Label fx:id="timingLabel" styleClass="timing-note" wrapText="true" maxWidth="Infinity"
+                           managed="false" visible="false"/>
+
+                    <VBox spacing="4">
+                        <Label text="Why" styleClass="section-title"/>
+                        <VBox fx:id="reasonsBox"/>
+                    </VBox>
+
+                    <VBox fx:id="warningsBox" spacing="8"/>
+
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Label fx:id="savedLabel" styleClass="muted" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                        <Button text="Open in history" onAction="#onOpenHistory" styleClass="btn-secondary"/>
+                        <Button text="Try instalments" onAction="#onOpenSimulator" styleClass="btn-ghost"/>
+                    </HBox>
+                </VBox>
             </VBox>
-        </VBox>
+        </HBox>
     </content>
 </ScrollPane>

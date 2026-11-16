@@ -1,57 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- Login screen – shown first when the app starts (Phase 4).
-     Applies auth-root + auth-card from base.css + auth.css via SceneManager.showAuthScreen. -->
+<!-- Login: brand panel (left) + sign-in form (right). Styled by base.css + auth.css. -->
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane xmlns="http://javafx.com/javafx"
-           xmlns:fx="http://javafx.com/fxml"
-           fx:controller="com.finsense.controller.LoginController"
-           styleClass="auth-root">
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.finsense.controller.LoginController"
+      styleClass="auth-root">
 
-    <VBox styleClass="auth-card" alignment="CENTER" spacing="14"
-          maxWidth="420" maxHeight="-Infinity">
-        <padding><Insets top="40" right="40" bottom="40" left="40"/></padding>
-
-        <!-- Brand -->
-        <Label text="FinSense" styleClass="brand-title"/>
-        <Label text="Financial Intelligent Decision System"
-               styleClass="brand-subtitle" wrapText="true"/>
-
-        <VBox spacing="4">
-            <Label text="USERNAME" styleClass="field-label"/>
-            <TextField fx:id="usernameField" promptText="Enter your username" maxWidth="Infinity"/>
-        </VBox>
-
-        <VBox spacing="4">
-            <Label text="PASSWORD" styleClass="field-label"/>
-            <PasswordField fx:id="passwordField" promptText="Enter your password" maxWidth="Infinity"/>
-        </VBox>
-
-        <!-- Inline error message; invisible until an error occurs -->
-        <Label fx:id="errorLabel" styleClass="error-label" wrapText="true"
-               managed="false" visible="false"/>
-
-        <Button fx:id="loginButton" text="Log in"
-                onAction="#onLogin"
-                styleClass="btn-primary"
-                defaultButton="true"
-                maxWidth="Infinity"/>
-
-        <Button text="Create an account"
-                onAction="#onGoToRegister"
-                styleClass="link-button"/>
-
-        <Button fx:id="demoButton" text="Load viva demo account"
-                onAction="#onLoadDemo" styleClass="btn-secondary" maxWidth="Infinity"/>
+    <!-- Brand panel -->
+    <VBox styleClass="auth-brand" spacing="14" prefWidth="460" minWidth="400">
+        <Label text="FINANCIAL INTELLIGENT DECISION SYSTEM" styleClass="auth-brand-topic"/>
+        <Label text="FinSense" styleClass="auth-brand-title"/>
+        <Region prefHeight="18"/>
+        <Label text="Know before you buy." styleClass="auth-brand-line" wrapText="true"/>
+        <Region prefHeight="10"/>
+        <HBox spacing="12" alignment="CENTER_LEFT">
+            <Region styleClass="auth-point-mark"/>
+            <Label text="Explains every BUY, WAIT or AVOID verdict" styleClass="auth-point"/>
+        </HBox>
+        <HBox spacing="12" alignment="CENTER_LEFT">
+            <Region styleClass="auth-point-mark"/>
+            <Label text="Learns from how your past purchases felt" styleClass="auth-point"/>
+        </HBox>
+        <HBox spacing="12" alignment="CENTER_LEFT">
+            <Region styleClass="auth-point-mark"/>
+            <Label text="Forecasts spending and spots unusual expenses" styleClass="auth-point"/>
+        </HBox>
+        <Region VBox.vgrow="ALWAYS"/>
+        <Label text="Guidance only - not financial advice." styleClass="auth-foot"/>
     </VBox>
 
-</StackPane>
+    <!-- Form -->
+    <StackPane HBox.hgrow="ALWAYS" styleClass="auth-form">
+        <VBox spacing="18" maxWidth="380" maxHeight="-Infinity">
+            <VBox spacing="6">
+                <Label text="Welcome back" styleClass="auth-title"/>
+                <Label text="Sign in to continue to your dashboard." styleClass="muted"/>
+            </VBox>
 
+            <VBox spacing="6">
+                <Label text="Username" styleClass="field-label"/>
+                <TextField fx:id="usernameField" promptText="Your username" maxWidth="Infinity"/>
+            </VBox>
+            <VBox spacing="6">
+                <Label text="Password" styleClass="field-label"/>
+                <PasswordField fx:id="passwordField" promptText="Your password" maxWidth="Infinity"/>
+            </VBox>
+
+            <Label fx:id="errorLabel" styleClass="error-label" wrapText="true" managed="false" visible="false"/>
+
+            <Button fx:id="loginButton" text="Sign in" onAction="#onLogin" styleClass="btn-primary"
+                    defaultButton="true" maxWidth="Infinity"/>
+
+            <HBox alignment="CENTER" spacing="4">
+                <Label text="New to FinSense?" styleClass="muted"/>
+                <Button text="Create an account" onAction="#onGoToRegister" styleClass="link-button"/>
+            </HBox>
+
+            <HBox alignment="CENTER" spacing="10">
+                <padding><Insets top="6"/></padding>
+                <Region styleClass="or-line" HBox.hgrow="ALWAYS"/>
+                <Label text="or" styleClass="muted"/>
+                <Region styleClass="or-line" HBox.hgrow="ALWAYS"/>
+            </HBox>
+
+            <Button fx:id="demoButton" text="Open the viva demo account" onAction="#onLoadDemo"
+                    styleClass="btn-secondary" maxWidth="Infinity"/>
+        </VBox>
+    </StackPane>
+</HBox>

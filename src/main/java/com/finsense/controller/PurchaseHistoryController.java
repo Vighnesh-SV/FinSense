@@ -2,10 +2,10 @@ package com.finsense.controller;
 
 import com.finsense.model.PurchaseHistory;
 import com.finsense.model.PurchaseSummary;
+import com.finsense.model.enums.PurchaseFeedback;
 import com.finsense.model.enums.PurchaseStatus;
 import com.finsense.service.PurchaseService;
 import com.finsense.util.SessionManager;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,6 +15,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.HBox;
 import javafx.util.StringConverter;
 
 /**
@@ -32,6 +33,12 @@ public class PurchaseHistoryController extends BaseController {
     @FXML private TableColumn<PurchaseSummary, String> verdictCol;
     @FXML private TableColumn<PurchaseSummary, String> scoreCol;
     @FXML private TableColumn<PurchaseSummary, String> statusCol;
+    @FXML private TableColumn<PurchaseSummary, String> feedbackCol;
+
+    @FXML private HBox feedbackBar;
+    @FXML private Button worthItButton;
+    @FXML private Button neutralButton;
+    @FXML private Button regretButton;
 
     @FXML private Button reevaluateButton;
     @FXML private Button purchasedButton;
@@ -56,27 +63,28 @@ public class PurchaseHistoryController extends BaseController {
 
     @FXML
     private void initialize() {
-        productCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().purchase().productName()));
-        priceCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().purchase().price().format()));
-        verdictCol.setCellValueFactory(c -> new SimpleStringProperty(
-                c.getValue().latestRecommendation() == null ? "—" : c.getValue().latestRecommendation().name()));
-        scoreCol.setCellValueFactory(c -> new SimpleStringProperty(
-                c.getValue().latestScore() == null ? "—" : c.getValue().latestScore().toString()));
-        statusCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().purchase().status().name()));
+        UiKit.text(productCol, p -> p.purchase().productName());
+        UiKit.money(priceCol, p -> p.purchase().price());
+        UiKit.text(verdictCol, p -> p.latestRecommendation() == null ? "" : p.latestRecommendation().name());
+        verdictCol.setCellFactory(column -> new DashboardController.VerdictCell<>());
+        UiKit.text(scoreCol, p -> p.latestScore() == null ? "—" : p.latestScore().toString());
+        UiKit.text(statusCol, p -> p.purchase().status().toString());
+        UiKit.text(feedbackCol, p -> p.feedback() == null ? "—" : p.feedback().toString());
 
-        evaluatedCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().evaluatedAt().toString()));
-        historyVerdictCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().recommendation().name()));
-        historyScoreCol.setCellValueFactory(c -> new SimpleStringProperty(Integer.toString(c.getValue().score())));
-        expenseCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().snapshotExpenses().format()));
-        disposableCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().snapshotDisposable().format()));
-        freeSavingsCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().snapshotFreeSavings().format()));
-        behaviourCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().snapshotBehaviour()));
+        UiKit.text(evaluatedCol, h -> h.evaluatedAt().format(UiKit.DAY_TIME));
+        UiKit.text(historyVerdictCol, h -> h.recommendation().name());
+        historyVerdictCol.setCellFactory(column -> new DashboardController.VerdictCell<>());
+        UiKit.text(historyScoreCol, h -> Integer.toString(h.score()));
+        UiKit.money(expenseCol, PurchaseHistory::snapshotExpenses);
+        UiKit.money(disposableCol, PurchaseHistory::snapshotDisposable);
+        UiKit.money(freeSavingsCol, PurchaseHistory::snapshotFreeSavings);
+        UiKit.text(behaviourCol, PurchaseHistory::snapshotBehaviour);
 
         // StringConverter (anonymous class) decides how an evaluation appears in the combo boxes.
         StringConverter<PurchaseHistory> display = new StringConverter<>() {
             @Override
             public String toString(PurchaseHistory h) {
-                return h == null ? "" : h.evaluatedAt() + " · " + h.recommendation() + " · " + h.score();
+                return h == null ? "" : h.evaluatedAt().format(UiKit.DAY_TIME) + " · " + h.recommendation() + " · " + h.score();
             }
 
             @Override
@@ -103,6 +111,8 @@ public class PurchaseHistoryController extends BaseController {
         reevaluateButton.setDisable(!selected);
         purchasedButton.setDisable(status != PurchaseStatus.EVALUATED);
         droppedButton.setDisable(!selected || status == PurchaseStatus.PURCHASED);
+        UiKit.show(feedbackBar, status == PurchaseStatus.PURCHASED);
+        highlightFeedback(selected ? summary.feedback() : null);
 
         if (!selected) {
             historyTable.getItems().clear();
@@ -188,6 +198,48 @@ public class PurchaseHistoryController extends BaseController {
                 reload();
             });
         }
+    }
+
+    /** Marks the chosen rating chip with the "selected" style class. */
+    private void highlightFeedback(PurchaseFeedback feedback) {
+        worthItButton.getStyleClass().remove("selected");
+        neutralButton.getStyleClass().remove("selected");
+        regretButton.getStyleClass().remove("selected");
+        if (feedback != null) {
+            Button chosen = switch (feedback) {
+                case WORTH_IT -> worthItButton;
+                case NEUTRAL -> neutralButton;
+                case REGRET -> regretButton;
+            };
+            chosen.getStyleClass().add("selected");
+        }
+    }
+
+    @FXML
+    private void onWorthIt() {
+        rate(PurchaseFeedback.WORTH_IT);
+    }
+
+    @FXML
+    private void onNeutral() {
+        rate(PurchaseFeedback.NEUTRAL);
+    }
+
+    @FXML
+    private void onRegret() {
+        rate(PurchaseFeedback.REGRET);
+    }
+
+    private void rate(PurchaseFeedback feedback) {
+        PurchaseSummary selected = selectedPurchase();
+        if (selected == null) {
+            return;
+        }
+        long id = selected.purchase().id();
+        runSafely(() -> {
+            service.rate(id, feedback);
+            reloadAndReselect(id);
+        });
     }
 
     private void reload() {

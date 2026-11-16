@@ -26,7 +26,7 @@ public class FinSenseApp extends Application {
     @Override
     public void start(Stage stage) {
         stage.setTitle(APP_TITLE);
-        stage.setMinWidth(1000);
+        stage.setMinWidth(1100);
         stage.setMinHeight(640);
 
         // 1. Prepare the database before showing any screen.

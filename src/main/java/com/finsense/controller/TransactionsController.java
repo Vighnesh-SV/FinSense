@@ -75,10 +75,12 @@ public class TransactionsController extends BaseController {
         dateField.setValue(LocalDate.now());
 
         // Each column turns a Transaction record into display text (lambda = cell value factory).
-        dateCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().date().toString()));
+        UiKit.text(dateCol, t -> t.date().format(UiKit.SHORT_DAY));
         typeCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().type().getLabel()));
         categoryCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().category().name()));
-        amountCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().amount().format()));
+        // Signed amount: "+" for income, "−" for expense (so a separate Type column is not needed).
+        UiKit.text(amountCol, t -> (t.type() == TransactionType.INCOME ? "+ " : "− ") + t.amount().format());
+        amountCol.getStyleClass().add("money");
         descriptionCol.setCellValueFactory(c -> new SimpleStringProperty(orEmpty(c.getValue().description())));
 
         // The category list depends on the chosen type (income vs expense categories).

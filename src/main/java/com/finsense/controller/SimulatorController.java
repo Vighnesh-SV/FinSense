@@ -1,16 +1,15 @@
 package com.finsense.controller;
 
+import com.finsense.decision.DecisionResult;
 import com.finsense.decision.Recommendation;
 import com.finsense.model.Category;
 import com.finsense.model.CommitmentEnding;
 import com.finsense.model.GoalImpact;
-import com.finsense.model.Money;
 import com.finsense.model.SimulationResult;
 import com.finsense.model.enums.Necessity;
 import com.finsense.service.PurchaseService;
 import com.finsense.service.SimulationService;
 import com.finsense.util.SessionManager;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
@@ -18,11 +17,12 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.StringConverter;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -43,11 +43,15 @@ public class SimulatorController extends BaseController {
     @FXML private Button simulateButton;
     @FXML private Label errorLabel;
 
+    @FXML private VBox emptyState;
     @FXML private VBox resultCard;
+    @FXML private HBox verdictHero;
     @FXML private Label verdictLabel;
+    @FXML private Label planLabel;
     @FXML private Label scoreLabel;
+    @FXML private Label timingLabel;
     @FXML private LineChart<Number, Number> savingsChart;
-    @FXML private ListView<String> warningsList;
+    @FXML private VBox warningsBox;
 
     @FXML private TableView<GoalImpact> goalsTable;
     @FXML private TableColumn<GoalImpact, String> goalNameCol;
@@ -69,19 +73,28 @@ public class SimulatorController extends BaseController {
         necessityCombo.setValue(Necessity.WANT);
         instalmentsCombo.setItems(FXCollections.observableArrayList(INSTALMENT_OPTIONS));
         instalmentsCombo.setValue(1);
+        // StringConverter controls how each Integer is shown in the combo box.
+        instalmentsCombo.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(Integer n) {
+                return n == null ? "" : n == 1 ? "One payment" : n + " monthly instalments";
+            }
 
-        goalNameCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().goalName()));
-        goalEtaCol.setCellValueFactory(c -> new SimpleStringProperty(
-                eta(c.getValue().baselineEta()) + " → " + eta(c.getValue().purchaseEta())));
-        goalDelayCol.setCellValueFactory(c -> new SimpleStringProperty(
-                c.getValue().delayMonths() + " month(s)"
-                        + (c.getValue().missesDeadline() ? " · Misses deadline" : "")));
-        goalDeadlineCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().deadline().toString()));
+            @Override
+            public Integer fromString(String text) {
+                return null;
+            }
+        });
 
-        commitmentNameCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().name()));
-        commitmentEndCol.setCellValueFactory(c -> new SimpleStringProperty(
-                c.getValue().endDate() + " · month " + c.getValue().monthNumber()));
-        commitmentAmountCol.setCellValueFactory(c -> new SimpleStringProperty(c.getValue().monthlyAmount().format()));
+        UiKit.text(goalNameCol, GoalImpact::goalName);
+        UiKit.text(goalEtaCol, g -> eta(g.baselineEta()) + "  →  " + eta(g.purchaseEta()));
+        UiKit.text(goalDelayCol, g -> (g.delayMonths() == 0 ? "No delay" : g.delayMonths() + " month(s) later")
+                + (g.missesDeadline() ? " · misses deadline" : ""));
+        UiKit.text(goalDeadlineCol, g -> g.deadline().format(UiKit.DAY));
+
+        UiKit.text(commitmentNameCol, CommitmentEnding::name);
+        UiKit.text(commitmentEndCol, c -> c.endDate().format(UiKit.DAY) + "  (month " + c.monthNumber() + ")");
+        UiKit.money(commitmentAmountCol, CommitmentEnding::monthlyAmount);
 
         if (SessionManager.getInstance().isLoggedIn()) {
             runSafely(() -> categoryCombo.setItems(
@@ -92,8 +105,6 @@ public class SimulatorController extends BaseController {
     @FXML
     private void onSimulate() {
         hideInlineError(errorLabel);
-        resultCard.setVisible(false);
-        resultCard.setManaged(false);
 
         // Read every control on the JavaFX thread before going to the background thread.
         String name = productNameField.getText();
@@ -103,7 +114,7 @@ public class SimulatorController extends BaseController {
         int instalments = instalmentsCombo.getValue() == null ? 1 : instalmentsCombo.getValue();
 
         if (category == null) {
-            showInlineError(errorLabel, "Choose an expense category.");
+            showInlineError(errorLabel, "Choose a category.");
             return;
         }
         runInBackground(() -> simulationService.simulate(name, category, price, necessity, instalments),
@@ -113,35 +124,51 @@ public class SimulatorController extends BaseController {
     }
 
     private void showResult(SimulationResult result) {
-        Recommendation recommendation = result.decision().recommendation();
+        DecisionResult decision = result.decision();
+        Recommendation recommendation = decision.recommendation();
         verdictLabel.setText(recommendation.name());
-        verdictLabel.getStyleClass().removeIf(style -> style.startsWith("badge-"));
-        verdictLabel.getStyleClass().add("badge-" + recommendation.name().toLowerCase());
-        scoreLabel.setText(result.decision().score() + " / 100 · " + result.instalments() + " instalment(s)");
-        warningsList.setItems(FXCollections.observableArrayList(result.decision().warnings()));
+        UiKit.applyVerdict(verdictLabel, recommendation);
+        UiKit.applyVerdict(verdictHero, recommendation);
+        scoreLabel.setText(String.valueOf(decision.score()));
+        planLabel.setText(result.instalments() == 1
+                ? "Paid in one go."
+                : "Paid in " + result.instalments() + " monthly instalments.");
+
+        boolean hasTiming = decision.affordableFrom() != null;
+        if (hasTiming) {
+            timingLabel.setText("Smart timing: this fits safely from "
+                    + decision.affordableFrom().format(UiKit.MONTH) + " if you keep saving at your current rate.");
+        }
+        UiKit.show(timingLabel, hasTiming);
 
         XYChart.Series<Number, Number> baseline = new XYChart.Series<>();
         XYChart.Series<Number, Number> withPurchase = new XYChart.Series<>();
-        baseline.setName("Without purchase");
-        withPurchase.setName("With purchase");
+        baseline.setName("Without the purchase");
+        withPurchase.setName("With the purchase");
         result.projection().forEach(point -> {
-            baseline.getData().add(new XYChart.Data<>(point.monthNumber(), rupees(point.baselineSavings())));
-            withPurchase.getData().add(new XYChart.Data<>(point.monthNumber(), rupees(point.withPurchaseSavings())));
+            baseline.getData().add(new XYChart.Data<>(point.monthNumber(), UiKit.rupees(point.baselineSavings())));
+            withPurchase.getData().add(new XYChart.Data<>(point.monthNumber(),
+                    UiKit.rupees(point.withPurchaseSavings())));
         });
-        savingsChart.getData().setAll(baseline, withPurchase);
+        savingsChart.getData().setAll(List.of(baseline, withPurchase));
 
         goalsTable.setItems(FXCollections.observableArrayList(result.goalImpacts()));
         commitmentTable.setItems(FXCollections.observableArrayList(result.commitmentEndings()));
-        resultCard.setVisible(true);
-        resultCard.setManaged(true);
+
+        warningsBox.getChildren().clear();
+        for (String warning : decision.warnings()) {
+            Label note = new Label(warning);
+            note.setWrapText(true);
+            note.setMaxWidth(Double.MAX_VALUE);
+            note.getStyleClass().add("info-note");
+            warningsBox.getChildren().add(note);
+        }
+
+        UiKit.show(emptyState, false);
+        UiKit.show(resultCard, true);
     }
 
     private static String eta(LocalDate date) {
-        return date == null ? "Unknown" : date.toString();
-    }
-
-    /** Charts plot rupees; Money stores paise internally. */
-    private static double rupees(Money money) {
-        return money.getPaise() / 100.0;
+        return date == null ? "not reachable" : date.format(UiKit.SHORT_MONTH);
     }
 }
