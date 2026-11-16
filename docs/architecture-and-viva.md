@@ -1,4 +1,4 @@
-# FinSense architecture and viva notes
+# FinSense (Financial Intelligent Decision System): architecture and viva notes
 
 ## Modules and architecture
 

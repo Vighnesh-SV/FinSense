@@ -18,7 +18,7 @@ import javafx.stage.Stage;
  */
 public class FinSenseApp extends Application {
 
-    public static final String APP_TITLE = "FinSense – Personal Finance Decision & Spending Advisor";
+    public static final String APP_TITLE = "FinSense – Financial Intelligent Decision System";
 
     /** First screen shown after start-up. */
     public static final String START_SCREEN = "/fxml/login.fxml";

@@ -1,6 +1,6 @@
-# FinSense — Personal Finance Decision & Spending Advisor
+# FinSense — Financial Intelligent Decision System
 
-FinSense is a Java desktop application for tracking a personal financial profile, recurring commitments, transactions and savings goals. Its purchase advisor explains a recommendation using transparent rules and a frozen financial snapshot. The app also includes a behaviour questionnaire, purchase history, a read-only what-if simulator, a dashboard, spending insights and CSV export.
+FinSense (project topic: **Financial Intelligent Decision System**) is a Java desktop application for tracking a personal financial profile, recurring commitments, transactions and savings goals. Its purchase advisor explains a recommendation using transparent rules and a frozen financial snapshot. The app also includes a behaviour questionnaire, purchase history, a read-only what-if simulator, a dashboard, spending insights and CSV export.
 
 ## Requirements
 

@@ -8,7 +8,7 @@
     <artifactId>finsense</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
-    <name>FinSense - Personal Finance Decision &amp; Spending Advisor</name>
+    <name>FinSense - Financial Intelligent Decision System</name>
 
     <properties>
         <!-- Compile for Java 21 (LTS). Any JDK 21 or newer can build and run it. -->

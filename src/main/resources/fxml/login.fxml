@@ -22,7 +22,7 @@
 
         <!-- Brand -->
         <Label text="FinSense" styleClass="brand-title"/>
-        <Label text="Personal Finance Decision &amp; Spending Advisor"
+        <Label text="Financial Intelligent Decision System"
                styleClass="brand-subtitle" wrapText="true"/>
 
         <VBox spacing="4">
