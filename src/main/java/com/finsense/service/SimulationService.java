@@ -35,7 +35,11 @@ public class SimulationService {
     }
     public SimulationResult simulate(PurchaseRequest request,int instalments){
         if(instalments<1 || instalments>PROJECTION_MONTHS)throw new ValidationException("Instalments must be between 1 and 12.");
-        FinancialSnapshot snapshot=evaluator.buildSnapshot();DecisionResult decision=evaluator.evaluate(request,snapshot);
+        FinancialSnapshot snapshot=evaluator.buildSnapshot();
+        // The verdict must reflect the payment plan being simulated, not always an upfront payment.
+        PurchaseRequest planned=new PurchaseRequest(request.productName(),request.category(),request.price(),
+                request.necessity(),request.description(),instalments);
+        DecisionResult decision=evaluator.evaluate(planned,snapshot);
         FinancialProfile profile=financialService.getProfile().orElseThrow(()->new IncompleteProfileException("Please complete your financial profile first."));
         List<Commitment> commitments=financialService.getCommitments();
         List<SavingsGoal> goals=goalService.goals().stream().filter(g->g.status()==GoalStatus.ACTIVE).toList();

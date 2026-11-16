@@ -54,7 +54,9 @@ public class BehaviourDAO extends BaseDAO {
                 "WHERE t.user_id=? AND t.type='EXPENSE' AND c.nature='DISCRETIONARY' AND t.txn_date BETWEEN ? AND ?",userId,start,today);
         long purchased=queryLong("SELECT COUNT(DISTINCT p.id) FROM purchases p WHERE p.user_id=? AND p.status='PURCHASED'",userId);
         long regretted=queryLong("SELECT COUNT(DISTINCT p.id) FROM purchases p WHERE p.user_id=? AND p.status='PURCHASED' " +
-                "AND EXISTS(SELECT 1 FROM purchase_history h WHERE h.purchase_id=p.id AND h.recommendation IN ('AVOID','WAIT'))",userId);
+                // "Ignored advice": bought although the LATEST evaluation said WAIT or AVOID.
+                "AND (SELECT h.recommendation FROM purchase_history h WHERE h.purchase_id=p.id " +
+                "ORDER BY h.evaluated_at DESC, h.id DESC LIMIT 1) IN ('AVOID','WAIT')",userId);
         double spendShare=expenses==0?0.0:Money.ofPaise(discretionary).ratioTo(Money.ofPaise(expenses));
         double transactionShare=expenseCount==0?0.0:(double)discretionaryCount/expenseCount;
         return new SpendingSignals(first,spendShare,transactionShare,(int)regretted,(int)purchased);

@@ -35,6 +35,14 @@ class DecisionEngineTest {
         var s=snapshot(Money.ofRupees(50000),Money.ofRupees(100000),Money.ofRupees(10000),Money.ofRupees(5000),Money.ofRupees(100000),List.of(),BehaviourType.SMART_SHOPPER,false);
         assertEquals(Recommendation.AVOID,engine.evaluate(request(150001,Necessity.NEED),s).recommendation());
     }
+    @Test void instalmentsAvoidHardStopWhenEachPaymentIsAffordable(){
+        var s=snapshot(Money.ofRupees(50000),Money.ofRupees(100000),Money.ofRupees(10000),Money.ofRupees(5000),Money.ofRupees(100000),List.of(),BehaviourType.SMART_SHOPPER,false);
+        var upfront=new PurchaseRequest("Laptop",DISCRETIONARY,Money.ofRupees(180000),Necessity.NEED,null,1);
+        var emi=new PurchaseRequest("Laptop",DISCRETIONARY,Money.ofRupees(180000),Necessity.NEED,null,12);
+        assertEquals(Recommendation.AVOID,engine.evaluate(upfront,s).recommendation());
+        assertNotEquals(Recommendation.AVOID,engine.evaluate(emi,s).recommendation());
+        assertEquals(Money.ofRupees(15000),emi.monthlyPayment());
+    }
     @Test void purchaseThatBreaksEmergencyReserveIsWaitOrWorse(){
         var s=snapshot(Money.ofRupees(50000),Money.ofRupees(100000),Money.ofRupees(95000),Money.ofRupees(5000),Money.ofRupees(100000),List.of(),BehaviourType.SMART_SHOPPER,false);
         assertTrue(engine.evaluate(request(10000,Necessity.NEED),s).recommendation().ordinal()>=Recommendation.WAIT.ordinal());

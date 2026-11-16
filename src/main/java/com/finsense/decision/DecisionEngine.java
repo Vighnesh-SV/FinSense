@@ -23,7 +23,7 @@ public final class DecisionEngine {
         for(RuleResult result:results) if(result.cap().isPresent() && result.cap().get().ordinal()>finalRecommendation.ordinal())
             finalRecommendation=result.cap().get();
         Money affordable= snapshot.freeSavings().plus(Money.max(snapshot.disposableIncome(),Money.ZERO));
-        boolean hardStop=request.price().isGreaterThan(affordable);
+        boolean hardStop=request.monthlyPayment().isGreaterThan(affordable);
         if(hardStop) finalRecommendation=Recommendation.AVOID;
         List<String> explanation=new ArrayList<>();
         explanation.add("FinSense suggests "+finalRecommendation+" for "+request.productName()+" (score "+score+"/100).");
@@ -35,7 +35,7 @@ public final class DecisionEngine {
                     .map(RuleResult::message).findFirst().orElse("a safety rule");
             explanation.add("Score suggested "+band+", limited to "+finalRecommendation+" because "+reason);
         }
-        if(hardStop) explanation.add("Hard stop: the price exceeds free savings plus non-negative disposable income.");
+        if(hardStop) explanation.add((request.instalments()>1?"Hard stop: one instalment":"Hard stop: the price")+" exceeds free savings plus non-negative disposable income.");
         List<String> warnings=new ArrayList<>();
         if(snapshot.fallbackDataUsed()) warnings.add("Spending history is limited; declared monthly expenses were used.");
         if(snapshot.activeGoals().isEmpty()) warnings.add("No active savings goals are set.");

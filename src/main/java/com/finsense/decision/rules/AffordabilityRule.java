@@ -8,7 +8,7 @@ public final class AffordabilityRule implements DecisionRule {
    return cap==null?RuleResult.points(DecisionThresholds.UNAFFORDABLE_PENALTY,Severity.HIGH,"Disposable income is zero or negative after commitments and savings target."):
     RuleResult.cap(DecisionThresholds.UNAFFORDABLE_PENALTY,cap,Severity.HIGH,"A WANT is capped at WAIT because disposable income is zero or negative.");
   }
-  double ratio=r.price().ratioTo(s.disposableIncome());
+  double ratio=r.monthlyPayment().ratioTo(s.disposableIncome());
   if(ratio<=DecisionThresholds.AFFORDABLE_RATIO)return RuleResult.points(DecisionThresholds.AFFORDABLE_PENALTY,Severity.INFO,"The price is a small share of disposable income.");
   if(ratio<=DecisionThresholds.MODERATE_RATIO)return RuleResult.points(DecisionThresholds.MODERATE_PENALTY,Severity.LOW,"The price uses a noticeable share of disposable income.");
   if(ratio<=DecisionThresholds.FULL_DISPOSABLE_RATIO)return RuleResult.points(DecisionThresholds.FULL_PENALTY,Severity.CAUTION,"The price uses a large share of disposable income.");

@@ -49,6 +49,12 @@ public class TransactionDAO extends BaseDAO {
     public boolean delete(long id,long userId) {
         return update("DELETE FROM transactions WHERE id=? AND user_id=?",id,userId)>0;
     }
+    /** Date of the user's earliest transaction, or empty when there is none. */
+    public Optional<LocalDate> firstTransactionDate(long userId) {
+        List<LocalDate> rows=queryList("SELECT MIN(txn_date) first_date FROM transactions WHERE user_id=?",
+                rs->getDate(rs,"first_date"),userId);
+        return rows.isEmpty()?Optional.empty():Optional.ofNullable(rows.get(0));
+    }
     public long sum(long userId,TransactionType type,LocalDate from,LocalDate through,boolean excludeCommitments) {
         String sql="SELECT COALESCE(SUM(t.amount),0) FROM transactions t JOIN categories c ON c.id=t.category_id "+
                 "WHERE t.user_id=? AND t.type=? AND t.txn_date BETWEEN ? AND ?"+(excludeCommitments?" AND c.is_commitment=FALSE":"");

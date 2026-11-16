@@ -12,8 +12,10 @@ import com.finsense.util.SessionManager;
 import com.finsense.util.ValidationUtil;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /** Coordinates transaction validation and summaries using constructor-injected DAOs. */
@@ -70,20 +72,34 @@ public class TransactionService {
                 Collectors.summingLong(t->t.amount().getPaise())))
                 .entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey,e->Money.ofPaise(e.getValue())));
     }
-    /** Average monthly expense over the requested calendar months, excluding commitment categories. */
+    /**
+     * Average monthly expense over the last {@code months} COMPLETE calendar months, excluding
+     * commitment categories. The current (partial) month is never included, and months before
+     * the user's first transaction are not counted - otherwise a new user's spending would be
+     * divided by months in which nothing was recorded, understating expenses.
+     */
     public Money averageMonthlyExpenses(int months) {
         if(months<1 || months>36) throw new ValidationException("Months must be between 1 and 36.");
-        YearMonth current=YearMonth.now(); LocalDate from=current.minusMonths(months-1L).atDay(1);
-        long total=transactionDAO.sum(userId(),TransactionType.EXPENSE,from,current.atEndOfMonth(),true);
-        return Money.ofPaise(total).divide(months);
+        long uid=userId();
+        Optional<LocalDate> first=transactionDAO.firstTransactionDate(uid);
+        if(first.isEmpty()) return Money.ZERO;
+        YearMonth lastComplete=YearMonth.now().minusMonths(1);
+        YearMonth start=YearMonth.from(first.get());
+        YearMonth earliestAllowed=lastComplete.minusMonths(months-1L);
+        if(start.isBefore(earliestAllowed)) start=earliestAllowed;
+        if(start.isAfter(lastComplete)) return Money.ZERO;          // no complete month recorded yet
+        long counted=ChronoUnit.MONTHS.between(start,lastComplete)+1;
+        long total=transactionDAO.sum(uid,TransactionType.EXPENSE,start.atDay(1),lastComplete.atEndOfMonth(),true);
+        return Money.ofPaise(total).divide(counted);
     }
     public Money thisMonthExpenses() {
         YearMonth month=YearMonth.now();
         return Money.ofPaise(transactionDAO.sum(userId(),TransactionType.EXPENSE,month.atDay(1),LocalDate.now(),true));
     }
-    /** At least one transaction is old enough to represent a full month of recorded history. */
+    /** True when at least one complete calendar month (before this one) has recorded transactions. */
     public boolean hasAtLeastOneFullMonthOfData() {
-        LocalDate cutoff=LocalDate.now().minusDays(30);
-        return !find(null,cutoff,null,null,null).isEmpty();
+        return transactionDAO.firstTransactionDate(userId())
+                .map(first->YearMonth.from(first).isBefore(YearMonth.now()))
+                .orElse(false);
     }
 }

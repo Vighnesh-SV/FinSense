@@ -49,11 +49,23 @@ class TransactionServiceTest {
     }
     @Test void monthlyExpenseAverageExcludesCommitmentCategories() {
         Category emi=byName("EMI / Loan Repayment",TransactionType.EXPENSE),groceries=byName("Groceries",TransactionType.EXPENSE);
-        LocalDate today=LocalDate.now();
+        LocalDate today=LocalDate.now(); YearMonth now=YearMonth.now();
+        // Two complete months of history: ₹2000 and ₹4000 of non-commitment spending.
+        service.add(groceries.id(),TransactionType.EXPENSE,"2000",now.minusMonths(2).atDay(5),"food");
+        service.add(groceries.id(),TransactionType.EXPENSE,"4000",now.minusMonths(1).atDay(5),"food");
+        service.add(emi.id(),TransactionType.EXPENSE,"9000",now.minusMonths(1).atDay(6),"loan installment");
+        // The current, partial month must not drag the average down.
         service.add(emi.id(),TransactionType.EXPENSE,"9000",today,"loan installment");
         service.add(groceries.id(),TransactionType.EXPENSE,"3000",today,"food");
-        assertEquals(Money.ofRupees(1000),service.averageMonthlyExpenses(3));
+        assertEquals(Money.ofRupees(3000),service.averageMonthlyExpenses(3));   // (2000+4000)/2, not /3
         assertEquals(Money.ofRupees(3000),service.thisMonthExpenses());
+        assertTrue(service.hasAtLeastOneFullMonthOfData());
+    }
+    @Test void averageIsZeroWithoutACompleteMonth() {
+        Category groceries=byName("Groceries",TransactionType.EXPENSE);
+        service.add(groceries.id(),TransactionType.EXPENSE,"3000",LocalDate.now(),"food");
+        assertEquals(Money.ZERO,service.averageMonthlyExpenses(3));
+        assertFalse(service.hasAtLeastOneFullMonthOfData());
     }
     @Test void anotherUserCannotSeeTransactions() {
         Category food=byName("Groceries",TransactionType.EXPENSE); service.add(food.id(),TransactionType.EXPENSE,"500",LocalDate.now(),"private");
