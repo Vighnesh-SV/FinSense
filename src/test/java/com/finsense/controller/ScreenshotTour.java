@@ -81,6 +81,32 @@ class ScreenshotTour {
         });
         Thread.sleep(2500);
         shoot(stage, dir, "20-advisor-result");
+
+        // The calendar popup of a DatePicker (it lives in its own window).
+        onFx(() -> {
+            main.navigate(Screen.SAVINGS_GOALS);
+            Parent root = stage.getScene().getRoot();
+            root.applyCss();
+            root.layout();
+            ((javafx.scene.control.DatePicker) root.lookup("#deadlinePicker")).show();
+            return null;
+        });
+        Thread.sleep(800);
+        onFx(() -> {
+            javafx.stage.Window popup = javafx.stage.Window.getWindows().get(javafx.stage.Window.getWindows().size() - 1);
+            WritableImage image = popup.getScene().snapshot(null);
+            int w = (int) image.getWidth();
+            int h = (int) image.getHeight();
+            java.awt.image.BufferedImage png = new java.awt.image.BufferedImage(w, h,
+                    java.awt.image.BufferedImage.TYPE_INT_ARGB);
+            for (int y = 0; y < h; y++) {
+                for (int x = 0; x < w; x++) {
+                    png.setRGB(x, y, image.getPixelReader().getArgb(x, y));
+                }
+            }
+            ImageIO.write(png, "png", new File(dir, "21-calendar.png"));
+            return null;
+        });
     }
 
     private static void shoot(Stage stage, File dir, String name) throws Exception {

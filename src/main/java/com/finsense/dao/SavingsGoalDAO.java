@@ -55,7 +55,8 @@ public class SavingsGoalDAO extends BaseDAO {
             long committed=queryLong("SELECT COALESCE(SUM(c.amount),0) FROM goal_contributions c JOIN savings_goals g ON g.id=c.goal_id " +
                     "WHERE g.user_id=? AND g.status='ACTIVE'",userId);
             long free=Math.max(0,totalSavings-committed);
-            if(amount.getPaise()>free) throw new ValidationException("Contribution exceeds free savings of "+Money.ofPaise(free).format()+".");
+            if(amount.getPaise()>free) throw new ValidationException("You can put aside at most "+Money.ofPaise(free).format()+" - that is all your free savings right now. "
+                    +"Enter a smaller amount, or update Current savings in My profile.");
             long contributionId=insert("INSERT INTO goal_contributions(goal_id,amount,contributed_on,note) VALUES(?,?,?,?)",goalId,amount,date,note);
             SavingsGoal goal=findById(goalId,userId).orElseThrow();
             if(goal.savedAmount().isGreaterThan(goal.targetAmount()) || goal.savedAmount().equals(goal.targetAmount()))

@@ -115,7 +115,7 @@
 .chip.selected { -fx-background-color: -fs-green; -fx-border-color: -fs-green; -fx-text-fill: white; }
 
 /* ---------- Inputs ---------- */
-.text-field, .password-field, .text-area, .combo-box, .date-picker, .spinner {
+.text-field, .password-field, .text-area, .combo-box, .date-picker {
     -fx-background-color: -fs-surface;
     -fx-background-radius: 6;
     -fx-border-color: -fs-line-strong;
@@ -166,7 +166,20 @@
 .date-picker-popup { -fx-background-color: -fs-surface; -fx-border-color: -fs-line-strong; }
 .date-picker-popup .month-year-pane { -fx-background-color: -fs-green; }
 .date-picker-popup .month-year-pane .label { -fx-text-fill: white; -fx-font-weight: bold; }
-.date-picker-popup .spinner .left-button, .date-picker-popup .spinner .right-button { -fx-background-color: transparent; }
+.date-picker-popup .month-year-pane .spinner {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.date-picker-popup .month-year-pane .spinner .label { -fx-text-fill: white; -fx-font-size: 13px; }
+.date-picker-popup .spinner .left-button, .date-picker-popup .spinner .right-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+.date-picker-popup .spinner .left-button:hover, .date-picker-popup .spinner .right-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+}
+.date-picker-popup .day-name-cell { -fx-text-fill: -fs-muted; -fx-font-size: 11px; }
+.date-picker-popup .next-month, .date-picker-popup .previous-month { -fx-text-fill: #b9b4a6; }
 .date-picker-popup .left-arrow, .date-picker-popup .right-arrow { -fx-background-color: white; }
 .date-picker-popup .day-cell:hover { -fx-background-color: -fs-green-tint; }
 .date-picker-popup .selected { -fx-background-color: -fs-green; -fx-text-fill: white; }
